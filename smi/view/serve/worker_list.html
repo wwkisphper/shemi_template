@@ -1,0 +1,134 @@
+<!doctype html>
+<html class="no-js">
+<head>
+<style type="text/css">
+    .am-table th,td{text-align: center;vertical-align:middle !important;}
+</style>
+{include file="public/head" /}
+
+</head>
+<body>
+
+{include file="public/header" /}
+
+<div class="am-cf admin-main">
+
+{include file="public/sidebar" nav="serve"/}
+<div class="admin-content">
+    <div class="admin-content-body">
+
+<div class="am-cf am-padding am-padding-bottom-0">
+            
+                <div class="am-g">
+                    <div class="am-u-sm-7">
+                        <strong class="am-text-primary am-text-lg">服务管理</strong> / <small>工作人员录入</small>
+                    </div>
+                    <div class="am-u-sm-4">
+                        
+                    </div>
+                    <div class="am-u-sm-1">
+                        <button type="button" onclick="showAddForm();" class="am-btn am-btn-secondary am-round">新添工作人员</button>
+                    </div>
+                </div>
+                
+          
+           
+                
+          
+</div>
+        
+        
+
+        <hr>
+
+
+
+        <div class="am-scrollable-horizontal">
+        
+            <table class="am-table">
+                <thead>
+                    <tr>
+                        <th>工作人员图片</th>
+                        <th>工作人员姓名</th>
+                        <th>工作人员简介</th>
+                        <th>操作</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {volist name="data" id="vo"}
+                        <tr <?php if($i%2 == 1){echo "class='am-active'";}?> >
+                            <td><img src="__ROOT__/uploads/serve/{$vo.picture}" alt="" style="width:100px;"></td>
+                            <td>{$vo.name}</td>
+                            <td>{$vo.introduce}</td>
+                            <td>
+                                <button type="button" onclick="InquiresDel({$vo.id});" class="am-btn am-btn-danger am-round">删除</button>
+                            </td>
+                        </tr>
+                    {/volist}
+                </tbody>  
+            </table>
+        </div>
+    </div>
+    
+</div>
+<div id="addForm" style="display:none;">
+    <form class="am-form"   action="{:url('Serve/AddWorker')}" method="post" enctype="multipart/form-data" >
+    <br>
+        <div class="am-input-group am-input-group-primary" style="padding:0 5%">
+
+          <span class="am-input-group-label"></span>
+          <input type="text" class="am-form-field" name="name" placeholder="请输入工作人员名称" required>
+        </div>
+        <br>
+        <br>
+
+        <div class="am-form-group" style="padding:0 5%">
+          <label for="doc-ta-1">文本域</label>
+          <textarea class="" name="introduce" rows="5" id="doc-ta-1"></textarea>
+        </div>
+        <br />
+
+        <div class="am-form-group am-form-file" style="padding:0 5%">
+          <label for="doc-ipt-file-2">工作人员头像</label>
+          <div>
+            <button type="button" class="am-btn am-btn-default am-btn-sm">
+              <i class="am-icon-cloud-upload"></i> 选择要上传的文件（宽高比例：1）</button>
+          </div>
+          <input type="file" id="doc-ipt-file-2" name="picture[]">
+        </div>
+
+        <br>
+
+        <center><button type="submit" style="width:80%;"  class="am-btn am-btn-secondary am-round">添加</button></center>
+        <br>
+    </form>
+</div>
+
+
+
+{include file="public/footer" /}
+</body>
+<script>
+    function showAddForm(){
+        //自定页
+        layer.open({
+            title:['添加工作人员','background:#AAAAAA;color:white;text-align:center;padding:0;'],
+            type: 1,
+            area: ['500px', '500px'],
+            skin: 'layui-layer-demo', //样式类名
+            closeBtn: 0, //不显示关闭按钮
+            anim: 2,
+            shadeClose: true, //开启遮罩关闭
+             content: $('#addForm').html()
+        });
+    }
+</script>
+<script>
+    function InquiresDel(id){
+        if(confirm("请再次确认是否删除此工作人员")){
+            location.href="{:url('Serve/DelWorker')}?id="+id;
+        }
+    }
+</script>
+</html>

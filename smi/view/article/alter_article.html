@@ -1,0 +1,104 @@
+<!doctype html>
+<html class="no-js">
+<head>
+<style type="text/css">
+    .am-table th,td{text-align: center;}
+</style>
+{include file="public/head" /}
+
+</head>
+<body>
+
+{include file="public/header" /}
+
+<div class="am-cf admin-main">
+
+{include file="public/sidebar" nav="article"/}
+<div class="admin-content">
+    <div class="admin-content-body">
+
+<div class="am-cf am-padding am-padding-bottom-0">
+            
+    <div class="am-g">
+        <div class="am-u-sm-7">
+            <strong class="am-text-primary am-text-lg">文章管理</strong> / <small>修改文章</small>
+        </div>
+        <div class="am-u-sm-4">
+            
+        </div>
+        <div class="am-u-sm-1">
+           
+        </div>
+    </div>
+</div>
+  <center><img src="__ROOT__/uploads/article/{$data.picture}" height="150px;" alt=""></center>
+<hr>
+<form class="am-form" method="post" action="{:url('Article/AlterArticle')}" enctype="multipart/form-data" >
+  <input type="hidden" name="id" value="{$data.id}">
+<div class="am-panel am-panel-primary">
+  <div class="am-panel-hd">文章基本信息</div>
+  <div class="am-panel-bd">
+    
+
+            <div class="am-form-group">
+              <label for="doc-ipt-title-1">文章标题</label>
+              <input type="text" class="" id="doc-ipt-title-1" name="title" value="{$data.title}" placeholder="请输入文章标题" required />
+            </div>
+            
+            <div class="am-form-group am-form-file">
+              <label for="doc-ipt-file-2">文章标题图片</label>
+              <div>
+                <button type="button" class="am-btn am-btn-default am-btn-sm">
+                  <i class="am-icon-cloud-upload"></i> 选择要上传的文件(不上传视为不修改，宽高比例：1)</button>
+              </div>
+              <input type="file" id="doc-ipt-file-2" name="picture[]">
+            </div>
+
+            <div class="am-form-group">
+              <label for="doc-ipt-reading-1">文章阅读量</label>
+              <input type="number" class="" id="doc-ipt-reading-1" name="reading_amount" value="{$data.reading_amount}" placeholder="请设置阅读量" required />
+            </div>
+
+            <div class="am-form-group">
+              <label for="doc-ipt-praise-1">文章点赞数</label>
+              <input type="number" class="" id="doc-ipt-praise-1" name="number_praise" value="{$data.number_praise}" placeholder="请设置点赞数" required />
+            </div>
+
+    
+  </div>
+</div>
+
+<div class="am-panel am-panel-primary">
+  <div class="am-panel-hd">文章内容</div>
+  <div class="am-panel-bd">
+    <div class="am-form-group">
+        <script id="container" name="content" type="text/plain" style="height: 300px;">{:htmlspecialchars_decode($data['content'])}</script>
+        
+        <script type="text/javascript" src="__ROOT__/static/UEditor/ueditor.config.js"></script>
+        <!-- 编辑器源码文件 -->
+        <script type="text/javascript" src="__ROOT__/static/UEditor/ueditor.all.js"></script>
+
+        <script type="text/javascript">
+            var ue = UE.getEditor('container');
+        </script>
+    </div>
+    
+  </div>
+</div>
+<center><button type="submit" class="am-btn am-btn-secondary am-round" style="width:10%;">修改</button></center>
+</form>
+
+        
+
+
+    </div>
+    
+</div>
+  </div>
+
+
+
+{include file="public/footer" /}
+</body>
+
+</html>

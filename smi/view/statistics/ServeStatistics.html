@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+  {include file="public/head" /}
+</head>
+<body>
+  {include file="public/header" /}
+
+
+<div class="am-cf admin-main">
+{include file="public/sidebar" nav="statistics"/}
+<style type="text/css">
+.txtr {text-align: right;}
+.am-btn-default {background-color: #fff}
+/*select {color: rgba(0,0,0,0)!important;}*/
+.am-progress {margin-bottom: 0;max-width: 300px;}
+.am-progress-bar {color: #000;}
+.am-form input[type='datetime-local'] {display: inline;width: 220px;}
+</style>
+<div class="admin-content">
+  <div class="admin-content-body">
+    <div class="am-cf am-padding">
+      <div class="am-fl am-cf">
+        <strong class="am-text-primary am-text-lg">数据统计</strong> / 
+        <small>服务订单统计</small>
+      </div>
+    </div>
+    <hr style="margin-top:0px;">
+
+    <div class="am-g" style="padding: 0 1.6rem;">
+      <div class="am-panel am-panel-secondary">
+        <div class="am-panel-hd">查询</div>
+        <div class="am-panel-bd">
+          <form action="" method="GET" class="am-form">
+            <div class="am-g">
+              <div class="am-form-group">
+                <div class="am-u-sm-2 txtr">预约日期</div>
+                <div class="am-u-sm-2">
+                  开始时间:<input type="date" name="begindate"  value="{$begindate}"/>
+                </div>
+                <div class="am-u-sm-2">
+                  结束时间:<input type="date" name="enddate" value="{$enddate}"/>
+                </div>
+                <div class="am-u-sm-6" style="line-height: 37px;">&nbsp;</div>
+              </div>
+              <div class="am-form-group" style="padding-top: 30px;">
+                <div class="am-u-sm-2">&nbsp;</div>
+                <div class="am-u-sm-3">
+                  <button type="submit" class="am-btn am-btn-default">搜索</button>
+                </div>
+                <div class="am-u-sm-1">&nbsp;</div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="am-scrollable-horizontal">
+        
+            <table class="am-table">
+                <thead>
+                    <tr>
+
+                        <th>预约服务名称</th>
+                        <th>已下订单数</th>
+                        <th>订单完成数</th>
+                        <th>订单已收总额</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {volist name="data" id="vo"}
+                        <tr>
+                            <td>{$vo.serve_name}</td>
+                            <td>{$vo.ordering_num}</td>
+                            <td>{$vo.complete_num}</td>
+                            <td>{$vo.total_money|round=###,2}</td>
+                        </tr>
+                    {/volist}
+                </tbody>  
+            </table>
+            
+            
+        
+        </div>
+    </div>
+  </div>
+  <footer class="admin-content-footer"><hr></footer>
+</div>
+
+{include file="public/footer" /}
+
+  </body>
+  </html>

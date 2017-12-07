@@ -1,0 +1,121 @@
+<!-- <script src="__PUBLIC__/assets/js/jquery.min.js"></script>
+<script src="__PUBLIC__/assets/js/amazeui.min.js"></script>
+<script src="__PUBLIC__/assets/js/app.js"></script> -->
+<style>
+	.gai_title{
+		display: flex;
+		justify-content: space-around;
+		height: 45px;
+		line-height: 45px;
+		font-size: 16px;
+	}
+	.all_div{
+		display: flex;
+
+	}
+	.first_di{
+		width: 100px;
+		text-align: right;
+		margin-right: 30px;
+	}
+	.jj_gai{
+		display: flex;
+		background: #F37B1D;
+	}
+	.gai_span{
+		width: 105px;
+		line-height: 50px;
+		margin-left: 5px;
+		color: #fff;
+	}
+	.gai_input{
+		width: 280px;
+		height: 30px;
+		border-radius: 10px;
+		margin-top: 11px;
+	}
+/* 	.am-btn{
+		width: 60%;
+		margin-left: 20%;
+		color: #fff;
+		margin-top: 20px;
+	} */
+</style>
+<audio id="remind" src="__ROOT__/static/remind.mp3"></audio>
+<script type="text/javascript">
+var remind = document.getElementById("remind");;
+$(function(argument){
+    $(".logout").on('click', function(event) {
+        var nextLink = "{:url('Login/logout')}";
+        var bool = confirm("确定退出登录吗？");
+        if (bool) {
+            location.href = nextLink;
+            return;
+        };
+    });
+
+
+});
+
+self.setInterval(getOrder,5000);   //10秒
+   	
+
+    //预定订单
+    function getOrder() {
+        $.ajax({  
+            type : "GET",  //提交方式
+            url : "{:url('Order/CheckNewOrder')}",//路径
+            // data : {"id":orderId},                  //数据，这里使用的是Json格式进行传输  
+            success : function(data) {      			//返回数据根据结果进行相应的处理  
+                if(data.status == 1){
+                	remind.currentTime = 0;
+					remind.play();
+					layer.closeAll('page'); //关闭所有页面层
+            		layer.open({
+	                title:['新的订单','background:#0e90d2;color:white;text-align:center;padding-left:76px;font-size:17px;'],
+	                type: 1,
+	                skin: 'layui-layer-rim', //加上边框
+	                area: ['420px', '600px'], //宽高
+	                content: data.content
+                });
+                }
+                
+            	
+            }  
+        });     
+    }
+
+
+
+	function InquiresRefuse(id){
+        $('#refuseId').val(id);
+        layer.open({
+            title:['拒绝订单','background:#AAAAAA;color:white;text-align:center;padding:0;'],
+            type: 1,
+            area: ['360px', '357.5px'],
+            skin: 'layui-layer-demo', //样式类名
+            closeBtn: 0, //不显示关闭按钮
+            anim: 2,
+            shadeClose: true, //开启遮罩关闭
+            content: $('#refuseForm').html()
+        });
+
+    }
+</script>
+
+<div id="refuseForm" style="display:none;">
+    <form class="am-form"   action="{:url('Order/OrderRefuse')}" method="post" >
+    <br>
+        <input type="hidden" id="refuseId" name="refuseId">
+        <div class="am-input-group am-input-group-primary" style="padding:0 5%">
+
+          <span class="am-input-group-label"></span>
+          <input type="text" class="am-form-field" name="refuse_reason" placeholder="请输入拒绝理由" required>
+        </div>
+        <br>
+
+        <center><button type="submit" style="width:80%;"  class="am-btn am-btn-secondary am-round">确认拒绝</button></center>
+        <br>
+    </form>
+</div>
+

@@ -1,0 +1,104 @@
+<!doctype html>
+<html class="no-js">
+<head>
+<style type="text/css">
+    .am-table th,td{text-align: center;}
+    table{table-layout:fixed;}
+</style>
+
+{include file="public/head" /}
+
+</head>
+<body>
+
+{include file="public/header" /}
+
+<div class="am-cf admin-main">
+
+{include file="public/sidebar" nav="article"/}
+<div class="admin-content">
+    <div class="admin-content-body">
+
+<div class="am-cf am-padding am-padding-bottom-0">
+            <div class="am-fl am-cf">
+                <strong class="am-text-primary am-text-lg">文章管理</strong> / <small>文章评论列表</small>
+            </div>
+</div>
+<hr>
+        <form action="{:url('Article/CommentList')}" class="am-form">
+        <div class="am-g">
+          <div class="am-u-lg-4">
+            <div class="am-input-group">
+              <span class="am-input-group-btn">
+                <button class="am-btn am-btn-default" type="submit"><span class="am-icon-search"></span> </button>
+              </span>
+              <input type="text" name="keyword" value="{$keyword}" class="am-form-field" placeholder="请输入文章名进行查询">
+            </div>
+          </div>
+          <div class="am-u-lg-8">
+            <div class="am-input-group">
+            </div>
+          </div>
+        </div>
+        </form>
+
+        <hr>
+
+
+        <div class="am-scrollable-horizontal">
+        
+            <table class="am-table">
+                <thead>
+                    <tr>
+                        <th>所属文章</th>
+                        <th>评论时间</th>
+                        <th>评论内容</th>
+                        <th>回复内容</th>
+                        <th>回复状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {volist name="data" id="vo"}
+                        <tr>
+                            <td>{$vo.title}</td>
+                            <td>{$vo.create_time}</td>
+                            <td>{$vo.content}</td>
+                            <td>{$vo.reply_content}</td>
+                            <td>{$vo.is_reply}</td>
+                            <td>
+                                <a href="{:url('Article/ReplyComment')}?id={$vo.id}" class="am-btn am-btn-secondary am-round">回复</a>
+                                <a href="javascript:;" onclick="InquiresDel({$vo.id});" class="am-btn am-btn-danger am-round">删除</a>
+                            </td>
+                        </tr>
+                    {/volist}
+                </tbody>  
+            </table>
+            <center>{$page}</center>
+            
+        <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+        </div>
+    </div>
+</div>
+
+
+
+{include file="public/footer" /}
+</body>
+<script>
+    function InquiresDel(id){
+        if(confirm("请再次确认是否删除该评论")){
+            location.href="{:url('Article/CommentDel')}?id="+id;
+        }
+    }
+</script>
+</html>

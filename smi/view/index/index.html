@@ -1,0 +1,60 @@
+<!doctype html>
+<html class="no-js">
+<head>
+{include file="public/head" /}
+
+</head>
+<body>
+
+{include file="public/header" /}
+
+<div class="am-cf admin-main">
+
+    <!-- sidebar start -->
+    {include file="public/sidebar" nav="index"/}
+    <!-- sidebar end -->
+
+    <!-- content start -->
+    <div class="admin-content">
+        <div class="admin-content-body">
+            <div class="am-cf am-padding am-padding-bottom-0">
+                <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">首页</strong></div>
+            </div>
+            <hr>
+            <div class="am-g">
+                <div class="am-u-sm-12">
+                    <h2 class="am-text-center am-text-xxxl am-margin-top-lg">预约模板管理后台</h2>
+                </div>
+            </div>
+            <div class="card-box">
+                <div class="am-panel-hd">注册量日走势</div>
+                <div class="am-panel-bd">
+                  <div id="container" style="min-width: 300px; height: 400px; margin: 0 auto"></div>  
+                </div>
+              </div>
+        </div>
+    </div>
+    <!-- content end -->
+</div>
+
+{include file="public/footer" /}
+<script src="__ROOT__/static/highcharts/highcharts.js"></script>
+<script type="text/javascript">
+  $(function(){
+    $('#container').highcharts({
+      chart: {type: 'line'},
+      title: {text: ''},
+      subtitle: {text: ''},
+      credits: {text: '', href: ''},
+      colors: ['#0061a5', '#ff0000'],
+      xAxis: {categories: [{:implode(',',$data['title'])}] },
+      yAxis: {title: {text: '人数'},allowDecimals:false },
+      series: [{
+        name: '注册量',
+        data: [{:implode(',',$data['count'])}]
+      }]
+    });
+  });
+</script>
+</body>
+</html>

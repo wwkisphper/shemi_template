@@ -1,0 +1,78 @@
+<!doctype html>
+<html class="no-js">
+<head>
+<style type="text/css">
+    .am-table th,td{text-align: center;}
+</style>
+{include file="public/head" /}
+
+</head>
+<body>
+
+{include file="public/header" /}
+
+<div class="am-cf admin-main">
+
+{include file="public/sidebar" nav="article"/}
+<div class="admin-content">
+    <div class="admin-content-body">
+
+<div class="am-cf am-padding am-padding-bottom-0">
+            
+    <div class="am-g">
+        <div class="am-u-sm-7">
+            <strong class="am-text-primary am-text-lg">文章管理</strong> / <small>回复评论</small>
+        </div>
+        <div class="am-u-sm-4">
+            
+        </div>
+        <div class="am-u-sm-1">
+           
+        </div>
+    </div>
+</div>
+<hr>
+<form class="am-form" method="post" action="{:url('Article/ReplyComment')}" >
+  <input type="hidden" name="id" value="{$data.id}">
+<div class="am-panel am-panel-primary">
+  <div class="am-panel-hd">回复显示</div>
+  <div class="am-panel-bd">
+    
+
+    <div class="am-radio">
+      <label>
+        <input type="radio" name="is_reply" value="1" <?php if($data['is_reply'] == 1){echo "checked";}?> >
+        显示评论回复
+      </label>
+    </div>
+
+    <div class="am-radio">
+      <label>
+        <input type="radio" name="is_reply" value="0" <?php if($data['is_reply'] == 0){echo "checked";}?>>
+        不显示评论回复
+      </label>
+    </div>
+
+    
+  </div>
+</div>
+
+<div class="am-panel am-panel-primary">
+  <div class="am-panel-hd">回复内容</div>
+  <div class="am-panel-bd">
+    <textarea class="" name="reply_content" value="{$data.reply_content}" rows="5" id="doc-ta-1"></textarea>
+  </div>
+</div>
+<center><button type="submit" class="am-btn am-btn-secondary am-round" style="width:10%;">回复</button></center>
+</form>
+    </div>
+    
+</div>
+  </div>
+
+
+
+{include file="public/footer" /}
+</body>
+
+</html>

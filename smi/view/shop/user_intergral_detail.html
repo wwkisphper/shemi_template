@@ -1,0 +1,71 @@
+<!doctype html>
+<html class="no-js">
+<head>
+<style type="text/css">
+    .am-table th,td{text-align: center;vertical-align:middle !important;}
+</style>
+{include file="public/head" /}
+
+</head>
+<body>
+
+{include file="public/header" /}
+
+<div class="am-cf admin-main">
+
+{include file="public/sidebar" nav="user"/}
+<div class="admin-content">
+    <div class="admin-content-body">
+
+<div class="am-cf am-padding am-padding-bottom-0">
+            
+                <div class="am-g">
+                    <div class="am-u-sm-2">
+                        <strong class="am-text-primary am-text-lg">用户管理</strong> / <small>用户积分</small>
+                    </div>
+                    <div class="am-u-sm-2">
+                        <span>用户拥有积分：<span style="color:red;">{$total}</span></span>
+                    </div>
+                    <div class="am-u-sm-8">
+                    </div>
+                </div>      
+</div>
+        
+        
+
+        <hr>
+
+
+
+        <div class="am-scrollable-horizontal">
+        
+            <table class="am-table">
+                <thead>
+                    <tr>
+                        <th>来源用户头像</th>
+                        <th>来源用户昵称</th>
+                        <th>变动积分</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {volist name="data" id="vo"}
+                        <tr <?php if($i%2 == 1){echo "class='am-active'";}?> >
+                            <td><img src="{$vo.picture}" alt="" style="height:100px;"></td>
+                            <td>{$vo.nickname}</td>
+                            <td>{$vo.integral}</td>
+                        </tr>
+                    {/volist}
+                </tbody>  
+            </table>
+            <center>{$page}</center>
+        </div>
+    </div>
+    
+</div>
+
+
+
+
+{include file="public/footer" /}
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!doctype html>
+<html class="no-js">
+<head>
+<style type="text/css">
+    .am-table th,td{text-align: center;}
+</style>
+{include file="public/head" /}
+
+</head>
+<body>
+
+{include file="public/header" /}
+
+<div class="am-cf admin-main">
+
+{include file="public/sidebar" nav="user"/}
+<div class="admin-content">
+    <div class="admin-content-body">
+
+<div class="am-cf am-padding am-padding-bottom-0">
+            <div class="am-fl am-cf">
+                <strong class="am-text-primary am-text-lg">用户管理</strong> / <small>用户签到记录列表</small>
+            </div>
+        </div>
+        
+        <hr>
+
+
+
+        <div class="am-scrollable-horizontal">
+        
+            <table class="am-table">
+                <thead>
+                    <tr>
+
+                        <th>用户头像</th>
+                        <th>用户昵称</th>
+                        <th>签到时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {volist name="data" id="vo"}
+                        <tr>
+                            <td><img class="am-radius" src="{$vo.picture}"  height="100"/></td>
+                            <td>{$vo.nickname}</td>
+                            <td>{$vo.create_time}</td>
+                        </tr>
+                    {/volist}
+                </tbody>  
+            </table>
+            <center>{$page}</center>
+            
+        <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+        </div>
+    </div>
+</div>
+    
+
+
+
+{include file="public/footer" /}
+</body>
+</html>

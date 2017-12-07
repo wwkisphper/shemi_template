@@ -1,0 +1,223 @@
+<!doctype html>
+<html class="no-js">
+<head>
+<style type="text/css">
+    .am-table th,td{text-align: center;}
+    table{table-layout:fixed;}
+</style>
+
+{include file="public/head" /}
+
+</head>
+<body>
+
+{include file="public/header" /}
+
+<div class="am-cf admin-main">
+
+{include file="public/sidebar" nav="shop"/}
+<div class="admin-content">
+    <div class="admin-content-body">
+
+<div class="am-cf am-padding am-padding-bottom-0">
+            <div class="am-fl am-cf">
+                <strong class="am-text-primary am-text-lg">积分订单管理</strong> / <small>积分订单列表</small>
+            </div>
+</div>
+<hr>
+        <form action="{:url('Order/OrderList')}" class="am-form">
+        <div class="am-g">
+          <div class="am-u-lg-12">
+            <div class="am-input-group">
+              <span class="am-input-group-btn">
+                <button class="am-btn am-btn-default" type="submit"><span class="am-icon-search"></span> </button>
+              </span>
+              <input type="text" name="keyword" value="{$keyword}" class="am-form-field" placeholder="联系人姓名/联系人电话">
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="am-g">
+            <div class="am-u-lg-12">
+                <div class="am-input-group">
+                    
+                    <input type="date" name="begindate" value="{$begindate}">
+                    <span class="am-input-group-label">-</span>
+                    <input type="date" name="enddate" value="{$enddate}">
+                </div>
+              </div>
+        </div>
+        <div class="am-g">
+            <div class="am-u-lg-3">
+                <div class="am-form-group">
+                  <label for="doc-select-1">订单状态</label>
+                  <select id="doc-select-1" name="status">
+                    <option value="">----</option>
+                    <option value="0" {php}if($status === 0){echo 'selected';}{/php}>未发货</option>
+                    <option value="1" {php}if($status == 1){echo 'selected';}{/php}>已发货</option>
+                    <option value="2" {php}if($status == 2){echo 'selected';}{/php}>已收货</option>
+                    <option value="3" {php}if($status == 3){echo 'selected';}{/php}>已完成</option>
+                    <option value="4" {php}if($status == 4){echo 'selected';}{/php}>已取消</option>
+                  </select>
+                  <span class="am-form-caret"></span>
+                </div>
+            </div>
+            <div class="am-u-lg-9">
+            </div>
+        </div>
+        </form>
+        
+        <hr>
+
+
+
+        <div class="am-scrollable-horizontal">
+        
+            <table class="am-table">
+                <thead>
+                    <tr>
+                        <th>商品图片</th>
+                        <th>商品名称</th>
+                        <th>支付积分</th>
+                        <th>联系人姓名</th>
+                        <th>联系人电话</th>
+                        <th>收货地址</th>
+                        <th>留言</th>
+                        <th>订单状态</th>
+                        <th>订单创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {volist name="data" id="vo"}
+                        <tr>
+                            <td><img src="__ROOT__/uploads/goods/{$vo.goods_picture}" height="100px;" alt=""></td>
+                            <td>{$vo.goods_name}</td>
+                            <td>{$vo.integral}</td>
+                            <td>{$vo.name}</td>
+                            <td>{$vo.phone}</td>
+                            <td>{$vo.address}</td>
+                            <td style="width:100%;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer" onclick="layer.msg('{$vo.message}')">{$vo.message}</td>
+                            <td>
+                                {switch name="vo.status"}
+                                    {case value="0"}未发货{/case}
+                                    {case value="1"}已发货{/case}
+                                    {case value="2"}已收货{/case}
+                                    {case value="3"}已完成{/case}
+                                    {case value="4"}已取消{/case}
+                                    {default /}错误
+                                {/switch}
+                            </td>
+                            <td>{$vo.create_time}</td>
+                            <td>
+                                {if condition="$vo.status eq 0"}
+                                    <a href="javascript:void(0);" class="am-btn am-btn-secondary" onclick="Ship({$vo.id})">发货</a>
+                                    <br>
+                                {/if}
+                                {if condition="$vo.status eq 1"}
+                                    <a href="javascript:void(0);" class="am-btn am-btn-success ship" data-name="{$vo.express_delivery_name}" data-number="{$vo.express_delivery_number}" data-id="{$vo.id}" >快递</a>
+                                    <br>
+                                {/if}
+                                {if condition="($vo.status eq 1) OR ($vo.status eq 2)"}
+                                    
+                                    
+                                    <a href="javascript:void(0);" class="am-btn am-btn-secondary" onclick="InquiresComplete({$vo.id})">完成</a>
+                                    <br>
+                                {/if}
+
+                                {if condition="($vo.status == 0) OR ($vo.status == 1)"}
+                                    <a href="javascript:void(0);" class="am-btn am-btn-danger" onclick="InquiresCancel({$vo.id})">取消</a>
+                                {/if}
+                            </td>
+                        </tr>
+                    {/volist}
+                </tbody>  
+            </table>
+            <center>{$page}</center>
+            
+        <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+        </div>
+    </div>
+</div>
+<div id="shipForm" style="display:none;">
+    <form class="am-form" id="ship_form" action="{:url('Shop/OrderShip')}" method="post" >
+    <br>
+        <input type="hidden" id="shop_order_id" name="id" />
+
+        <div class="am-form-group" style="padding:0 5%">
+          <label for="doc-ipt-company-1">快递公司名称</label>
+          <input type="text" name="express_delivery_name" class="" id="doc-ipt-company-1" placeholder="请输入快递公司名称" required>
+        </div>
+
+        <div class="am-form-group" style="padding:0 5%">
+          <label for="doc-ipt-number-1">快递公司号码</label>
+          <input type="text" name="express_delivery_number" class="" id="doc-ipt-number-1" placeholder="请输入快递单号" required>
+        </div>
+
+        <center><button type="submit" style="width:80%;"  class="am-btn am-btn-secondary am-round">发货</button></center>
+        <br>
+    </form>
+</div>
+
+
+
+{include file="public/footer" /}
+</body>
+<script>
+    function InquiresComplete(id){
+        if(confirm("请再次确认是否完成此订单")){
+            location.href="{:url('Shop/OrderComplete')}?id="+id;
+        }
+    }
+
+    function Ship(id){
+        $('#shop_order_id').val(id);
+        layer.open({
+            title:['发货','background:#AAAAAA;color:white;text-align:center;padding:0;'],
+            type: 1,
+            area: ['360px', '357.5px'],
+            skin: 'layui-layer-demo', //样式类名
+            closeBtn: 0, //不显示关闭按钮
+            anim: 2,
+            shadeClose: true, //开启遮罩关闭
+            content: $('#shipForm').html()
+        });
+
+    }
+
+    $('.ship').on('click',function(){
+        var obj = $('#ship_form').clone();
+        obj.find('#shop_order_id').val($(this).attr('data-id'));
+        obj.find('#doc-ipt-company-1').val($(this).attr('data-name'));
+        obj.find('#doc-ipt-number-1').val($(this).attr('data-number'));
+        obj.find('button').text('修改');
+        layer.open({
+            title:['地址信息','background:#AAAAAA;color:white;text-align:center;padding:0;'],
+            type: 1,
+            area: ['360px', '357.5px'],
+            skin: 'layui-layer-demo', //样式类名
+            closeBtn: 0, //不显示关闭按钮
+            anim: 2,
+            shadeClose: true, //开启遮罩关闭
+            content: '<div id="ship_alter"></div>'
+        });
+        $('#ship_alter').append(obj);
+    });
+</script>
+<script>
+    function InquiresCancel(id){
+        if(confirm("请再次确认是否取消该订单")){
+            location.href="{:url('Shop/OrderCancel')}?id="+id;
+        }
+    }
+</script>
+</html>

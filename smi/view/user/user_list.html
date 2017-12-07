@@ -1,0 +1,98 @@
+<!doctype html>
+<html class="no-js">
+<head>
+<style type="text/css">
+    .am-table th,td{text-align: center;}
+</style>
+{include file="public/head" /}
+
+</head>
+<body>
+
+{include file="public/header" /}
+
+<div class="am-cf admin-main">
+
+{include file="public/sidebar" nav="user"/}
+<div class="admin-content">
+    <div class="admin-content-body">
+
+<div class="am-cf am-padding am-padding-bottom-0">
+            <div class="am-fl am-cf">
+                <strong class="am-text-primary am-text-lg">用户管理</strong> / <small>用户列表</small>
+            </div>
+        </div>
+        <hr>
+        <div class="am-g">
+            <div class="am-u-sm-2">
+                <span>用户总数：<span style="color:red;">{$userCount}</span></span>
+            </div>
+            <div class="am-u-sm-10">
+                <form action="{:url('User/UserList')}" class="am-form">
+                    <div class="am-input-group">
+                      <span class="am-input-group-btn">
+                        <button class="am-btn am-btn-default" type="submit"><span class="am-icon-search"></span> </button>
+                      </span>
+                      <input type="text" name="keyword" value="{$keyword}" class="am-form-field" placeholder="请输入用户昵称查询">
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        
+
+        <hr>
+
+
+
+        <div class="am-scrollable-horizontal">
+        
+            <table class="am-table">
+                <thead>
+                    <tr>
+
+                        <th>用户头像</th>
+                        <th>用户昵称</th>
+                        <th>用户创建时间</th>
+                        {php} if(in_array(3,$added)){ {/php}
+                        <th>积分</th>
+                        {php} } {/php}
+                    </tr>
+                </thead>
+                <tbody>
+                    {volist name="data" id="vo"}
+                        <tr>
+                            <td><img class="am-radius" src="{$vo.picture}"  height="100"/></td>
+                            <td>{$vo.nickname}</td>
+                            <td>{$vo.create_time}</td>
+                            {php} if(in_array(3,$added)){ {/php}
+                            <td>
+                                <a href="{:url('Shop/UserIntegralDetail')}?id={$vo.id}">积分详情</a>
+                            </td>
+                            {php} } {/php}
+                        </tr>
+                    {/volist}
+                </tbody>  
+            </table>
+            <center>{$data -> render()}</center>
+            
+        <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+        </div>
+    </div>
+</div>
+    
+
+
+
+{include file="public/footer" /}
+</body>
+</html>

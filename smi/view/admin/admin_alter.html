@@ -1,0 +1,86 @@
+<!doctype html>
+<html class="no-js">
+<head>
+<style type="text/css">
+    .am-table th,td{text-align: center;}
+</style>
+{include file="public/head" /}
+
+</head>
+<body>
+
+{include file="public/header" /}
+
+<div class="am-cf admin-main">
+
+{include file="public/sidebar" nav="admin"/}
+<div class="admin-content">
+    <div class="admin-content-body">
+
+<div class="am-cf am-padding am-padding-bottom-0">
+            
+    <div class="am-g">
+        <div class="am-u-sm-7">
+            <strong class="am-text-primary am-text-lg">管理员管理</strong> / <small>修改管理员</small>
+        </div>
+        <div class="am-u-sm-4">
+            
+        </div>
+        <div class="am-u-sm-1">
+           
+        </div>
+    </div>
+</div>
+<hr>
+
+<div class="am-panel am-panel-primary">
+  <div class="am-panel-hd">管理员信息</div>
+  <div class="am-panel-bd">
+    <form class="am-form" method="post" action="{:url('Admin/AlterAdmin')}">
+    <input type="hidden" name="id" value="{$id}">
+        <fieldset>
+
+            <div class="am-form-group">
+              <label for="doc-ipt-name-1">帐号名</label>
+              <input type="text" class="" id="doc-ipt-name-1" name="username" placeholder="请输入帐号名" value="{$data.username}" <?php if($data['username'] == 'admin'){echo "readonly";}?> required />
+            </div>
+
+            <div class="am-form-group">
+              <label for="doc-ipt-password-1">新的密码</label>
+              <input type="text" class="" id="doc-ipt-password-1" name="userpass" placeholder="选填，不填则不修改密码" />
+            </div>
+
+            <div class="am-form-group">
+              <label class="am-checkbox-inline">
+                <input type="checkbox" name="value_added[]" value="1" <?php if(in_array(1,$data['value_added'])){echo 'checked';}?>> 店铺展示
+              </label>
+              <label class="am-checkbox-inline">
+                <input type="checkbox" name="value_added[]" value="2" <?php if(in_array(2,$data['value_added'])){echo 'checked';}?>> 文章
+              </label>
+              <label class="am-checkbox-inline">
+                <input type="checkbox" name="value_added[]" value="3" <?php if(in_array(3,$data['value_added'])){echo 'checked';}?>> 积分商城
+              </label>
+            </div>
+
+        </fieldset>
+    
+  </div>
+</div>
+<center><button type="submit" class="am-btn am-btn-secondary am-round" style="width:10%;">修改</button></center>
+</form>
+
+        
+
+
+        
+    </div>
+    
+</div>
+
+
+
+
+{include file="public/footer" /}
+</body>
+
+</html>

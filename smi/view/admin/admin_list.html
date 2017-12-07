@@ -1,0 +1,154 @@
+<!doctype html>
+<html class="no-js">
+<head>
+<style type="text/css">
+    .am-table th,td{text-align: center;}
+</style>
+{include file="public/head" /}
+
+</head>
+<body>
+
+{include file="public/header" /}
+
+<div class="am-cf admin-main">
+
+{include file="public/sidebar" nav="admin"/}
+<div class="admin-content">
+    <div class="admin-content-body">
+
+<div class="am-cf am-padding am-padding-bottom-0">
+            
+                <div class="am-g">
+                    <div class="am-u-sm-4">
+                        <strong class="am-text-primary am-text-lg">管理员管理</strong> / <small>管理员列表</small>
+                    </div>
+                    <div class="am-u-sm-4">
+                        <form action="{:url('Admin/AdminList')}">
+                            <div class="am-input-group">
+                              <span class="am-input-group-btn">
+                                <button class="am-btn am-btn-default" type="submit"><span class="am-icon-search"></span> </button>
+                              </span>
+                              <input type="text" name="keyword" value="{$keyword}" class="am-form-field" placeholder="请输入管理名称进行查询">
+                            </div>
+                      </form>
+                    </div>
+                    <div class="am-u-sm-3">
+                    </div>
+                    <div class="am-u-sm-1">
+                        <button type="button" onclick="showAddForm();" class="am-btn am-btn-secondary am-round">新添管理员</button>
+                    </div>
+                </div>
+                
+          
+           
+                
+          
+</div>
+        
+        
+
+        <hr>
+
+
+
+        <div class="am-scrollable-horizontal">
+        
+            <table class="am-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>管理员帐号名</th>
+                        <th>小程序appid</th>
+                        <th>小程序secret</th>
+                        <th>商户id</th>
+                        <th>商户secret密钥</th>
+                        <th>操作</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {volist name="data" id="vo"}
+                        <tr <?php if($i%2 == 1){echo "class='am-active'";}?> >
+                            <td><a href="{:url('Admin/AlterAdmin')}?id={$vo.id}"><i class="fa fa-pencil-square-o am-secondary" aria-hidden="true"></i></a></td>
+                            <td>{$vo.username}</td>
+                            <td>{$vo.appid}</td>
+                            <td>{$vo.secret}</td>
+                            <td>{$vo.mch_id}</td>
+                            <td>{$vo.mch_secret}</td>
+                            
+                            <td>
+                                {if condition="$vo.username neq 'admin'"}
+                                  <button type="button" onclick="InquiresDel({$vo.id});" class="am-btn am-btn-danger am-round">删除</button>  
+                                {else /}
+                                {/if}
+                                
+                            </td>
+                        </tr>
+                    {/volist}
+                </tbody>  
+            </table>
+        </div>
+    </div>
+    
+</div>
+<div id="addForm" style="display:none;">
+    <form class="am-form"   action="{:url('Admin/AddAdmin')}" method="post">
+    <br>
+        <div class="am-input-group am-input-group-primary" style="padding:0 5%">
+
+          <span class="am-input-group-label"><i class="am-icon-user am-icon-fw"></i></span>
+          <input type="text" class="am-form-field" name="username" placeholder="请输入要添加的管理员帐号" required>
+        </div>
+        <br>
+        <div class="am-input-group am-input-group-danger" style="padding:0 5%">
+          <span class="am-input-group-label"><i class="am-icon-lock am-icon-fw"></i></span>
+          <input type="text" class="am-form-field" name="userpass" placeholder="请输入添加的管理员帐号的密码" required>
+        </div>
+        <br>
+
+        <div class="am-form-group" style="padding:0 5%">
+          <label class="am-checkbox-inline">
+            <input type="checkbox" name="value_added[]" value="1"> 店铺展示
+          </label>
+          <label class="am-checkbox-inline">
+            <input type="checkbox" name="value_added[]" value="2"> 文章
+          </label>
+          <label class="am-checkbox-inline">
+            <input type="checkbox" name="value_added[]" value="3"> 积分商城
+          </label>
+        </div>
+        <br>
+        
+        <center><button type="submit" style="width:80%;"  class="am-btn am-btn-secondary am-round">添加</button></center>
+        <br>
+    </form>
+</div>
+
+
+
+{include file="public/footer" /}
+</body>
+<script>
+    function showAddForm(){
+        //自定页
+        layer.open({
+            title:['添加管理员','background:#AAAAAA;color:white;text-align:center;padding:0;'],
+            type: 1,
+            area: ['360px', '357.5px'],
+            skin: 'layui-layer-demo', //样式类名
+            closeBtn: 0, //不显示关闭按钮
+            anim: 2,
+            shadeClose: true, //开启遮罩关闭
+             content: $('#addForm').html()
+        });
+    }
+</script>
+<script>
+    function InquiresDel(id){
+        if(confirm("请再次确认是否删除该管理员")){
+            location.href="{:url('Admin/AdminDel')}?id="+id;
+        }
+    }
+</script>
+</html>

@@ -1,0 +1,233 @@
+    <div class="admin-sidebar am-offcanvas" id="admin-offcanvas">
+
+        <div class="am-offcanvas-bar admin-offcanvas-bar">
+        	<div class="am-hide-sm-only">
+                <center><a href="javascript:void(0);" class="logo" style="text-decoration: none;"><span>mpwechat.net<span></span></span><i class="zmdi zmdi-layers"></i></a>
+                </center>
+            </div>
+            <div class="user-box am-hide-sm-only">
+                <div class="user-img">
+                    <img src="__ROOT__/static/assets/img/avatar-1.jpg" alt="user-img" title="{$admin}" class="img-circle img-thumbnail img-responsive">
+                    
+                </div>
+                <h5><a class="logout" style="text-decoration: none;"  href="javascript:;">{$admin}</a> </h5>
+            </div>
+            {php} $added = explode(',',session('value_added'));  {/php}
+            <ul class="am-list admin-sidebar-list">
+                <li>
+                    <a href="{:url('Index/index')}">
+                        <span class="am-icon-desktop"></span>
+                        首页
+                    </a>
+                </li>
+                <li class="admin-parent">
+                    <a href="{:url('Index/InfoSet')}">
+                        <span class="am-icon-home"></span>
+                        配置设置
+                    </a>
+                </li>
+                {php} if(in_array(1,$added)){ {/php}
+                <li class="admin-parent">
+                    <a class="am-cf" data-am-collapse="{target: '#show-nav'}">
+                        <span class="am-icon-list-ul"></span>
+                        店铺展示
+                        <span class="am-icon-angle-right am-fr am-margin-right"></span>
+                    </a>
+                    <ul class="am-list am-collapse admin-sidebar-sub {if condition="'[nav]' eq 'show'"}am-in{/if}" id="show-nav">
+                        <li>
+                            <a href="{:url('Show/ShowList')}" class="am-cf">
+                                <span class="am-icon-calendar"></span>
+                                图片管理
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {php} } {/php}
+                {php} if(session('admin') == 'admin'){ {/php}
+                <li class="admin-parent">
+                    <a class="am-cf" data-am-collapse="{target: '#admin-nav'}">
+                        <span class="am-icon-list-ul"></span>
+                        管理员管理
+                        <span class="am-icon-angle-right am-fr am-margin-right"></span>
+                    </a>
+                    <ul class="am-list am-collapse admin-sidebar-sub {if condition="'[nav]' eq 'admin'"}am-in{/if}" id="admin-nav">
+                        <li>
+                            <a href="{:url('Admin/AdminList')}" class="am-cf">
+                                <span class="am-icon-calendar"></span>
+                                管理员列表
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {php} } {/php}
+                <li class="admin-parent">
+                    <a class="am-cf" data-am-collapse="{target: '#user-nav'}">
+                        <span class="am-icon-list-ul"></span>
+                        用户管理
+                        <span class="am-icon-angle-right am-fr am-margin-right"></span>
+                    </a>
+                    <ul class="am-list am-collapse admin-sidebar-sub {if condition="'[nav]' eq 'user'"}am-in{/if}" id="user-nav">
+                        <li>
+                            <a href="{:url('User/UserList')}" class="am-cf">
+                                <span class="am-icon-calendar"></span>
+                                用户列表
+                            </a>
+                        </li>
+                        {php} if(in_array(3,$added)){ {/php}
+                        <li>
+                            <a href="{:url('User/SignInList')}" class="am-cf">
+                                <span class="am-icon-calendar"></span>
+                                用户签到记录
+                            </a>
+                        </li>
+                        {php} } {/php}
+                    </ul>
+                </li>
+
+                <li class="admin-parent">
+                    <a class="am-cf" data-am-collapse="{target: '#serve-nav'}">
+                        <span class="am-icon-list-ul"></span>
+                        服务管理
+                        <span class="am-icon-angle-right am-fr am-margin-right"></span>
+                    </a>
+                    <ul class="am-list am-collapse admin-sidebar-sub {if condition="'[nav]' eq 'serve'"}am-in{/if}" id="serve-nav">
+                        <li>
+                            <a href="{:url('Serve/ServeList')}" class="am-cf">
+                                <span class="am-icon-calendar"></span>
+                                服务列表
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{:url('Serve/ClassifyList')}">
+                                <span class="am-icon-calendar"></span>
+                                分类录入
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{:url('Serve/WorkerList')}">
+                                <span class="am-icon-calendar"></span>
+                                工作人员录入
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{:url('Serve/SlideList')}">
+                                <span class="am-icon-calendar"></span>
+                                轮播图管理
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="admin-parent">
+                    <a class="am-cf" data-am-collapse="{target: '#order-nav'}">
+                        <span class="am-icon-list-ul"></span>
+                        订单管理
+                        <span class="am-icon-angle-right am-fr am-margin-right"></span>
+                    </a>
+                    <ul class="am-list am-collapse admin-sidebar-sub {if condition="'[nav]' eq 'order'"}am-in{/if}" id="order-nav">
+                        <li>
+                            <a href="{:url('Order/OrderList')}" class="am-cf">
+                                <span class="am-icon-calendar"></span>
+                                订单列表
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{:url('Order/RefundOrderList')}" class="am-cf">
+                                <span class="am-icon-calendar"></span>
+                                退约订单申请列表
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {php} if(in_array(2,$added)){ {/php}
+                <li class="admin-parent">
+                    <a class="am-cf" data-am-collapse="{target: '#article-nav'}">
+                        <span class="am-icon-list-ul"></span>
+                        文章管理
+                        <span class="am-icon-angle-right am-fr am-margin-right"></span>
+                    </a>
+                    <ul class="am-list am-collapse admin-sidebar-sub {if condition="'[nav]' eq 'article'"}am-in{/if}" id="article-nav">
+                        <li>
+                            <a href="{:url('Article/ArticleList')}" class="am-cf">
+                                <span class="am-icon-calendar"></span>
+                                文章列表
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{:url('Article/CommentList')}" class="am-cf">
+                                <span class="am-icon-calendar"></span>
+                                文章评论列表
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {php} } {/php}
+
+                {php} if(in_array(3,$added)){ {/php}
+				<li class="admin-parent">
+                    <a class="am-cf" data-am-collapse="{target: '#shop-nav'}">
+                        <span class="am-icon-list-ul"></span>
+                        积分商城管理
+                        <span class="am-icon-angle-right am-fr am-margin-right"></span>
+                    </a>
+                    <ul class="am-list am-collapse admin-sidebar-sub {if condition="'[nav]' eq 'shop'"}am-in{/if}" id="shop-nav">
+                        <li>
+                            <a href="{:url('Shop/GoodsList')}" class="am-cf">
+                                <span class="am-icon-calendar"></span>
+                                商品列表
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{:url('Shop/OrderList')}" class="am-cf">
+                                <span class="am-icon-calendar"></span>
+                                订单列表
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{:url('Shop/SlideList')}">
+                                <span class="am-icon-calendar"></span>
+                                轮播图管理
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {php} } {/php}
+
+                <li class="admin-parent">
+                    <a class="am-cf" data-am-collapse="{target: '#statistics-nav'}">
+                        <span class="am-icon-list-ul"></span>
+                        统计
+                        <span class="am-icon-angle-right am-fr am-margin-right"></span>
+                    </a>
+                    <ul class="am-list am-collapse admin-sidebar-sub {if condition="'[nav]' eq 'statistics'"}am-in{/if}" id="statistics-nav">
+                        <li>
+                            <a href="{:url('Statistics/RegisterStatistics')}" class="am-cf">
+                                <span class="am-icon-calendar"></span>
+                                注册统计
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{:url('Statistics/ServeStatistics')}" class="am-cf">
+                                <span class="am-icon-calendar"></span>
+                                服务订单统计
+                            </a>
+                        </li>
+                        {php} if(in_array(3,$added)){ {/php}
+                        <li>
+                            <a href="{:url('Statistics/GoodsOrderStatistics')}" class="am-cf">
+                                <span class="am-icon-calendar"></span>
+                                积分商品兑换统计
+                            </a>
+                        </li>
+                        {php} } {/php}
+                    </ul>
+                </li>
+                
+                
+            </ul>
+            <br>
+            <br>
+            <br>
+            <br>
+        </div>
+    </div>

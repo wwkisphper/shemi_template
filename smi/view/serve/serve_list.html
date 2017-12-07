@@ -1,0 +1,113 @@
+<!doctype html>
+<html class="no-js">
+<head>
+<style type="text/css">
+    .am-table th,td{text-align: center;vertical-align:middle !important;}
+</style>
+{include file="public/head" /}
+
+</head>
+<body>
+
+{include file="public/header" /}
+
+<div class="am-cf admin-main">
+
+{include file="public/sidebar" nav="serve"/}
+<div class="admin-content">
+    <div class="admin-content-body">
+
+<div class="am-cf am-padding am-padding-bottom-0">
+            
+                <div class="am-g">
+                    <div class="am-u-sm-7">
+                        <strong class="am-text-primary am-text-lg">服务管理</strong> / <small>服务列表</small>
+                    </div>
+                    <div class="am-u-sm-4">
+                        
+                    </div>
+                    <div class="am-u-sm-1">
+                        <a  href="{:url('Serve/AddServe')}" class="am-btn am-btn-secondary am-round">新添服务</a>
+                    </div>
+                </div>
+                
+          
+           
+                
+          
+</div>
+        
+        
+
+        <hr>
+
+
+
+        <div class="am-scrollable-horizontal">
+        
+            <table class="am-table">
+                <thead>
+                    <tr>
+                        <th>服务首图</th>
+                        <th>服务名称</th>
+                        <th>服务价格</th>
+                        <th>上下架</th>
+                        <th>操作</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {volist name="data" id="vo"}
+                        <tr <?php if($i%2 == 1){echo "class='am-active'";}?> >
+                            <td><img src="__ROOT__/uploads/serve/{$vo.picture}" alt="" style="height:100px;"></td>
+                            <td>{$vo.serve_name}</td>
+                            <td>￥{$vo.price}</td>
+                            <td>
+                                <div class="am-btn-group">
+                                  <button type="button" data-status="1" data-id="{$vo.id}" class="am-btn status am-btn-primary am-round <?php if($vo['status'] == 1){echo " am-active";}?>">上架</button>
+                                  <button type="button" data-status="0" data-id="{$vo.id}" class="am-btn status am-btn-primary am-round <?php if($vo['status'] == 0){echo " am-active";}?>">下架</button>
+                                </div>
+                            </td>
+                            <td>
+                                <a href="{:url('Serve/AlterServe')}?id={$vo.id}" class="am-btn am-btn-danger am-round">详情</a>
+                            </td>
+                        </tr>
+                    {/volist}
+                </tbody>  
+            </table>
+        </div>
+    </div>
+    
+</div>
+
+
+
+
+{include file="public/footer" /}
+</body>
+<script>
+    $('.status').on('click',function(){
+        var id = $(this).attr('data-id');
+        var status = $(this).attr('data-status');
+        var that = $(this);
+        $.ajax({
+            type:'POST',
+            url:"{:url('Serve/SetServeStatus')}",
+            data : {
+                id:id,
+                status:status
+            },
+            success:function(data){
+                if(data == 1){
+                    that.parent().children().removeClass('am-active');
+                    that.addClass('am-active');
+                }else if(data == -1){
+                    alert('更新失败');
+                }else{
+                    alert('网络出错，请稍后再试');
+                }
+            }
+        });
+    });
+</script>
+</html>

@@ -1,0 +1,166 @@
+<!doctype html>
+<html class="no-js">
+<head>
+<style type="text/css">
+    .am-table th,td{text-align: center;}
+</style>
+{include file="public/head" /}
+
+</head>
+<body>
+
+{include file="public/header" /}
+
+<div class="am-cf admin-main">
+
+{include file="public/sidebar" nav="serve"/}
+<div class="admin-content">
+    <div class="admin-content-body">
+
+<div class="am-cf am-padding am-padding-bottom-0">
+            
+    <div class="am-g">
+        <div class="am-u-sm-4">
+            <strong class="am-text-primary am-text-lg">服务管理</strong> / <small>修改服务</small>
+        </div>
+        <div class="am-u-sm-4">
+            {$data.serve_name}
+        </div>
+        <div class="am-u-sm-4">
+           
+        </div>
+    </div>
+</div>
+<hr>
+<p style="text-align:center">
+  {foreach name="data.picture" item="vo"}
+    <img class="am-radius" src="__ROOT__/uploads/serve/{$vo}" height="140"/>
+  {/foreach}
+  
+</p>
+<form class="am-form" method="post" action="{:url('Serve/AlterServe')}" enctype="multipart/form-data" >
+<input type="hidden" name="id" value="{$id}">
+<div class="am-panel am-panel-primary">
+  <div class="am-panel-hd">服务基本信息</div>
+  <div class="am-panel-bd">
+
+    <div class="am-form-group">
+      <label for="doc-ipt-name-1">服务名称</label>
+      <input type="text" class="" id="doc-ipt-name-1" name="serve_name" value="{$data.serve_name}" placeholder="请输入服务名称" required >
+    </div>
+
+    <div class="am-form-group">
+      <label for="doc-ipt-price-1">价格/元</label>
+      <input type="number" step="0.01" value="{$data.price}" class="" id="doc-ipt-price-1" name="price" placeholder="请输入服务价格" required >
+    </div>
+  
+    <div class="am-form-group">
+      <label for="doc-select-1">所属分类</label>
+      <select id="doc-select-1" name="classify">
+        {foreach name="classify" item="vo"}
+          <option value="{$vo.id}" <?php if($vo['id'] == $data['classify']){echo "selected";}?> >{$vo.name}</option>
+        {/foreach}
+      </select>
+      <span class="am-form-caret"></span>
+    </div>
+
+    <div class="am-form-group am-form-file">
+      <label for="doc-ipt-file-2">服务图片</label>
+      <div>
+        <button type="button" class="am-btn am-btn-default am-btn-sm">
+          <i class="am-icon-cloud-upload"></i> 选择要上传的文件(规则与添加时相同，不上传视为不修改图片)</button>
+      </div>
+      <input type="file" id="doc-ipt-file-2" multiple name="picture[]">
+    </div>
+
+    <div class="am-form-group am-form-file">
+      <label for="doc-ipt-file-2">商品详情介绍长图</label>
+      <div>
+        <button type="button" class="am-btn am-btn-default am-btn-sm">
+          <i class="am-icon-cloud-upload"></i> 选择要上传的文件(规则与添加时相同，不上传视为不修改图片)</button>
+      </div>
+      <input type="file" id="doc-ipt-file-3" name="picture_description[]">
+    </div>
+
+
+  </div>
+</div>
+
+<div class="am-panel am-panel-primary">
+  <div class="am-panel-hd">服务简介</div>
+  <div class="am-panel-bd">
+    <div class="am-form-group">
+      <textarea class="" rows="10" id="doc-ta-1" name="description">{$data.description}</textarea>
+    </div>
+  </div>
+</div>
+
+<div class="am-panel am-panel-primary">
+  <div class="am-panel-hd">可预约时间段</div>
+  <div class="am-panel-bd">
+      <table class="am-table">
+          <tr>
+            <th></th>
+            <th>周一</th>
+            <th>周二</th>
+            <th>周三</th>
+            <th>周四</th>
+            <th>周五</th>
+            <th>周六</th>
+            <th>周日</th>
+          </tr>
+          {for start="0" end="24"}
+          <tr>
+              <td><input type="checkbox" class="allchoose"></td>
+              <td><input type="checkbox" name="Monday[]" value="{$i}" <?php if(in_array($i, $data['order_time']['Monday'])){echo "checked";}?> >{$i}:00</td>
+              <td><input type="checkbox" name="Tuesday[]" value="{$i}" <?php if(in_array($i, $data['order_time']['Tuesday'])){echo "checked";}?>>{$i}:00</td>
+              <td><input type="checkbox" name="Wednesday[]" value="{$i}" <?php if(in_array($i, $data['order_time']['Wednesday'])){echo "checked";}?>>{$i}:00</td>
+              <td><input type="checkbox" name="Thursday[]" value="{$i}" <?php if(in_array($i, $data['order_time']['Thursday'])){echo "checked";}?>>{$i}:00</td>
+              <td><input type="checkbox" name="Friday[]" value="{$i}" <?php if(in_array($i, $data['order_time']['Friday'])){echo "checked";}?>>{$i}:00</td>
+              <td><input type="checkbox" name="Saturday[]" value="{$i}" <?php if(in_array($i, $data['order_time']['Saturday'])){echo "checked";}?>>{$i}:00</td>
+              <td><input type="checkbox" name="Sunday[]" value="{$i}" <?php if(in_array($i, $data['order_time']['Sunday'])){echo "checked";}?>>{$i}:00</td>
+          </tr>
+          {/for}
+      </table>
+  </div>
+</div>
+
+<div class="am-panel am-panel-primary">
+  <div class="am-panel-hd">可预约的该服务的工作人员</div>
+  <div class="am-panel-bd">
+    <div class="am-form-group">
+      {foreach name="woker" item="vo"}
+      <label class="am-checkbox-inline">
+        <input type="checkbox" name="woker[]" value="{$vo.id}" <?php if(in_array($vo['id'],$data['able_worker'])){echo "checked";}?> >{$vo.name}
+      </label>
+      {/foreach}
+    </div>
+      
+        
+      
+  </div>
+</div>
+<center><button type="submit" class="am-btn am-btn-secondary am-round" style="width:50%;">修改</button></center>
+
+
+</form>
+
+    </div>
+    
+</div>
+  </div>
+
+
+{include file="public/footer" /}
+</body>
+<script>
+  $('.allchoose').change(function(){
+
+    if($(this).is(':checked')){
+      $(this).parent().parent().find("input[type='checkbox']").prop('checked',true);
+    }else{
+      $(this).parent().parent().find("input[type='checkbox']").prop('checked',false);
+    }
+  });
+</script>
+</html>

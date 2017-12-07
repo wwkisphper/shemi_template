@@ -1,0 +1,200 @@
+<!doctype html>
+<html class="no-js">
+<head>
+<style type="text/css">
+    .am-table th,td{text-align: center;}
+    table{table-layout:fixed;}
+</style>
+
+{include file="public/head" /}
+
+</head>
+<body>
+
+{include file="public/header" /}
+
+<div class="am-cf admin-main">
+
+{include file="public/sidebar" nav="order"/}
+<div class="admin-content">
+    <div class="admin-content-body">
+
+<div class="am-cf am-padding am-padding-bottom-0">
+            <div class="am-fl am-cf">
+                <strong class="am-text-primary am-text-lg">订单管理</strong> / <small>订单列表</small>
+            </div>
+</div>
+<hr>
+        <form action="{:url('Order/OrderList')}" class="am-form">
+        <div class="am-g">
+          <div class="am-u-lg-4">
+            <div class="am-input-group">
+              <span class="am-input-group-btn">
+                <button class="am-btn am-btn-default" type="submit"><span class="am-icon-search"></span> </button>
+              </span>
+              <input type="text" name="keyword" value="{$keyword}" class="am-form-field" placeholder="请输入订单号/联系人/联系电话进行查询">
+            </div>
+          </div>
+          <div class="am-u-lg-8">
+            <div class="am-input-group">
+                
+                <input type="date" name="begindate" value="{$begindate}">
+                <span class="am-input-group-label">-</span>
+                <input type="date" name="enddate" value="{$enddate}">
+            </div>
+          </div>
+        </div>
+        </form>
+
+        <hr>
+        <div class="am-g">
+            <div class="am-u-sm-2">
+                <span>订单总数：<span style="color:red;">{$orderCount}</span></span>
+            </div>
+            <div class="am-u-sm-8">
+            </div>
+            <div class="am-u-sm-2">
+                <a class="am-btn am-btn-success" href="{:url('Order/OrderExcel')}" target="_blank">导出Excel(受搜索条件影响)</a>
+            </div>
+        </div>
+        
+        
+
+        <hr>
+
+
+
+        <div class="am-scrollable-horizontal">
+        
+            <table class="am-table">
+                <thead>
+                    <tr>
+                        <th>预约时间</th>
+                        <th>预约服务</th>
+                        <th>订单号</th>
+                        <th>订单金额</th>
+                        <th>联系人姓名</th>
+                        <th>联系人电话</th>
+                        <th>留言</th>
+                        <th>订单状态</th>
+                        <th>支付方式</th>
+                        <th>订单创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {volist name="data" id="vo"}
+                        <tr>
+                            <td>{$vo.order_time}</td>
+                            <td>
+                            {$vo.serve_name}
+                            {if condition="$vo.worker_name != ''"}
+                                ({$vo.worker_name})
+                            {/if}
+                            </td>
+                            <td>{$vo.number}</td>
+                            <td>￥{$vo.money}</td>
+                            <td>{$vo.name}</td>
+                            <td>{$vo.phone}</td>
+                            <td style="width:100%;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer" onclick="layer.msg('{$vo.message}')">{$vo.message}</td>
+                            <td>
+                                {switch name="vo.status"}
+                                    {case value="0"}未支付{/case}
+                                    {case value="1"}已付款{/case}
+                                    {case value="2"}已确认{/case}
+                                    {case value="3"}已完成{/case}
+                                    {case value="4"}
+                                        已取消
+                                       <small><a href="javascript:void(0);" onclick="layer.msg('{$vo.refuse_reason}')">(拒绝理由)</a></small>
+                                    {/case}
+                                    {default /}错误
+                                {/switch}
+                            </td>
+                            <td>
+                                {switch name="vo.opayway"}
+                                    {case value="1"}到店支付{/case}
+                                    {case value="2"}线上支付{/case}
+                                    {case value="3"}自定义金额支付{/case}
+                                    {default /}错误
+                                {/switch}
+                            </td>
+                            <td>{$vo.create_time}</td>
+                            <td>
+                                {if condition="($vo.status eq 0) OR ($vo.status eq 1)"}
+                                    <a href="javascript:void(0);" onclick="InquiresAffirm({$vo.id})">确认接单</a> | 
+                                    <a href="javascript:void(0);" onclick="InquiresRefuse({$vo.id})">拒绝接单</a>
+
+                                {/if}
+                                {if condition="$vo.status == 2"}
+                                    <a href="javascript:void(0);" onclick="InquiresComplete({$vo.id})">预约客户已到店消费</a>
+                                {/if}
+                            </td>
+                        </tr>
+                    {/volist}
+                </tbody>  
+            </table>
+            <center>{$page}</center>
+            
+        <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+        </div>
+    </div>
+</div>
+<!-- <div id="refuseForm" style="display:none;">
+    <form class="am-form"   action="{:url('Order/OrderRefuse')}" method="post" >
+    <br>
+        <input type="hidden" id="refuseId" name="refuseId">
+        <div class="am-input-group am-input-group-primary" style="padding:0 5%">
+
+          <span class="am-input-group-label"></span>
+          <input type="text" class="am-form-field" name="refuse_reason" placeholder="请输入拒绝理由" required>
+        </div>
+        <br>
+
+        <center><button type="submit" style="width:80%;"  class="am-btn am-btn-secondary am-round">确认拒绝</button></center>
+        <br>
+    </form>
+</div> -->
+
+
+
+{include file="public/footer" /}
+</body>
+<script>
+    function InquiresAffirm(id){
+        if(confirm("请再次确认是否接此单")){
+            location.href="{:url('Order/OrderAffirm')}?id="+id;
+        }
+    }
+
+    // function InquiresRefuse(id){
+    //     $('#refuseId').val(id);
+    //     layer.open({
+    //         title:['拒绝订单','background:#AAAAAA;color:white;text-align:center;padding:0;'],
+    //         type: 1,
+    //         area: ['360px', '357.5px'],
+    //         skin: 'layui-layer-demo', //样式类名
+    //         closeBtn: 0, //不显示关闭按钮
+    //         anim: 2,
+    //         shadeClose: true, //开启遮罩关闭
+    //         content: $('#refuseForm').html()
+    //     });
+
+    // }
+</script>
+<script>
+    function InquiresComplete(id){
+        if(confirm("请再次确认客户是否已到店消费")){
+            location.href="{:url('Order/OrderComplete')}?id="+id;
+        }
+    }
+</script>
+</html>

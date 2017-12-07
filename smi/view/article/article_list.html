@@ -1,0 +1,105 @@
+<!doctype html>
+<html class="no-js">
+<head>
+<style type="text/css">
+    .am-table th,td{text-align: center;vertical-align:middle !important;}
+</style>
+{include file="public/head" /}
+
+</head>
+<body>
+
+{include file="public/header" /}
+
+<div class="am-cf admin-main">
+
+{include file="public/sidebar" nav="article"/}
+<div class="admin-content">
+    <div class="admin-content-body">
+
+<div class="am-cf am-padding am-padding-bottom-0">
+            
+    <div class="am-g">
+        <div class="am-u-sm-7">
+            <strong class="am-text-primary am-text-lg">文章管理</strong> / <small>文章列表</small>
+        </div>
+        <div class="am-u-sm-4">
+            
+        </div>
+        <div class="am-u-sm-1">
+            <a  href="{:url('Article/AddArticle')}" class="am-btn am-btn-secondary am-round">新添文章</a>
+        </div>
+    </div>
+                   
+          
+</div>
+
+<form action="{:url('Article/ArticleList')}" class="am-form">
+        <div class="am-g">
+          <div class="am-u-lg-4">
+            <div class="am-input-group">
+              <span class="am-input-group-btn">
+                <button class="am-btn am-btn-default" type="submit"><span class="am-icon-search"></span> </button>
+              </span>
+              <input type="text" name="keyword" value="{$keyword}" class="am-form-field" placeholder="请输入文章名进行查询">
+            </div>
+          </div>
+          <div class="am-u-lg-8">
+            <div class="am-input-group">
+            </div>
+          </div>
+        </div>
+</form>
+        
+        
+
+        <hr>
+
+
+
+        <div class="am-scrollable-horizontal">
+        
+            <table class="am-table">
+                <thead>
+                    <tr>
+                        <th>文章标题图片</th>
+                        <th>文章标题名</th>
+                        <th>文章阅读量</th>
+                        <th>文章点赞数</th>
+                        <th>操作</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {volist name="data" id="vo"}
+                        <tr <?php if($i%2 == 1){echo "class='am-active'";}?> >
+                            <td><img src="__ROOT__/uploads/article/{$vo.picture}" alt="" style="height:100px;"></td>
+                            <td>{$vo.title}</td>
+                            <td>{$vo.reading_amount}</td>
+                            <td>{$vo.number_praise}</td>
+                            <td>
+                                <a href="{:url('Article/AlterArticle')}?id={$vo.id}" class="am-btn am-btn-secondary am-round">详情</a>
+                                <a href="javascript:;" onclick="InquiresDel({$vo.id});" class="am-btn am-btn-danger am-round">删除</a>
+                            </td>
+                        </tr>
+                    {/volist}
+                </tbody>  
+            </table>
+        </div>
+    </div>
+    
+</div>
+
+
+
+
+{include file="public/footer" /}
+</body>
+<script>
+    function InquiresDel(id){
+        if(confirm("请再次确认是否删除此文章")){
+            location.href="{:url('Article/DelArticle')}?id="+id;
+        }
+    }
+</script>
+</html>

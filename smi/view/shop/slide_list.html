@@ -1,0 +1,116 @@
+<!doctype html>
+<html class="no-js">
+<head>
+<style type="text/css">
+    .am-table th,td{text-align: center;vertical-align:middle !important;}
+</style>
+{include file="public/head" /}
+
+</head>
+<body>
+
+{include file="public/header" /}
+
+<div class="am-cf admin-main">
+
+{include file="public/sidebar" nav="shop"/}
+<div class="admin-content">
+    <div class="admin-content-body">
+
+<div class="am-cf am-padding am-padding-bottom-0">
+            
+                <div class="am-g">
+                    <div class="am-u-sm-7">
+                        <strong class="am-text-primary am-text-lg">服务管理</strong> / <small>首页轮播图列表</small>
+                    </div>
+                    <div class="am-u-sm-4">
+                        
+                    </div>
+                    <div class="am-u-sm-1">
+                        <button type="button" onclick="showAddForm();" class="am-btn am-btn-secondary am-round">新添轮播图</button>
+                    </div>
+                </div>
+                
+          
+           
+                
+          
+</div>
+        
+        
+
+        <hr>
+
+
+
+        <div class="am-scrollable-horizontal">
+        
+            <table class="am-table">
+                <thead>
+                    <tr>
+                        <th>轮播图图片</th>
+                        <th>操作</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {volist name="data" id="vo"}
+                        <tr <?php if($i%2 == 1){echo "class='am-active'";}?> >
+                            <td><img src="__ROOT__/uploads/goods/{$vo.picture}" alt="" style="height:100px;"></td>
+                            <td>
+                                <button type="button" onclick="InquiresDel({$vo.id});" class="am-btn am-btn-danger am-round">删除</button>
+                            </td>
+                        </tr>
+                    {/volist}
+                </tbody>  
+            </table>
+        </div>
+    </div>
+    
+</div>
+<div id="addForm" style="display:none;">
+    <form class="am-form"   action="{:url('Shop/AddSlide')}" method="post" enctype="multipart/form-data" >
+    <br>
+        <div class="am-form-group am-form-file" style="padding:0 5%">
+          <label for="doc-ipt-file-2">轮播图</label>
+          <div>
+            <button type="button" class="am-btn am-btn-default am-btn-sm">
+              <i class="am-icon-cloud-upload"></i> 选择要上传的文件</button>
+          </div>
+          <input type="file" id="doc-ipt-file-2" name="picture[]" required >
+        </div>
+
+        <br>
+
+        <center><button type="submit" style="width:80%;"  class="am-btn am-btn-secondary am-round">添加</button></center>
+        <br>
+    </form>
+</div>
+
+
+
+{include file="public/footer" /}
+</body>
+<script>
+    function showAddForm(){
+        //自定页
+        layer.open({
+            title:['添加轮播图','background:#AAAAAA;color:white;text-align:center;padding:0;'],
+            type: 1,
+            area: ['360px', '357.5px'],
+            skin: 'layui-layer-demo', //样式类名
+            closeBtn: 0, //不显示关闭按钮
+            anim: 2,
+            shadeClose: true, //开启遮罩关闭
+             content: $('#addForm').html()
+        });
+    }
+</script>
+<script>
+    function InquiresDel(id){
+        if(confirm("请再次确认是否删除此轮播图")){
+            location.href="{:url('Shop/DelSlide')}?id="+id;
+        }
+    }
+</script>
+</html>

@@ -1,0 +1,372 @@
+<!doctype html>
+<html class="no-js">
+<head>
+<style type="text/css">
+    .am-table th,td{text-align: center;}
+</style>
+{include file="public/head" /}
+
+</head>
+<body>
+
+{include file="public/header" /}
+
+<div class="am-cf admin-main">
+
+{include file="public/sidebar" nav="serve"/}
+<div class="admin-content">
+    <div class="admin-content-body">
+
+<div class="am-cf am-padding am-padding-bottom-0">
+            
+    <div class="am-g">
+        <div class="am-u-sm-4">
+            <strong class="am-text-primary am-text-lg">平台管理</strong> / <small>平台信息</small>
+        </div>
+        <div class="am-u-sm-4">
+            
+        </div>
+        <div class="am-u-sm-4">
+           
+        </div>
+    </div>
+</div>
+<hr>
+<form class="am-form" method="post" action="{:url('Index/InfoSet')}" enctype="multipart/form-data" >
+<div class="am-panel am-panel-primary">
+  <div class="am-panel-hd">平台基本信息</div>
+  <div class="am-panel-bd">
+
+    <div class="am-form-group">
+      <label for="doc-ipt-userpass-1">后台密码</label>
+      <input type="text" class="" id="doc-ipt-userpass-1" name="userpass"  placeholder="后台密码，不输入视为不修改" />
+    </div>
+    
+    <div class="am-form-group">
+      <label for="doc-ipt-appid-1">小程序appid<span style="color:red;">(非技术人员勿动)</span></label>
+      <input type="text" class="" id="doc-ipt-appid-1" name="appid" value="{$data.appid}"  placeholder="小程序appid" />
+    </div>
+
+    <div class="am-form-group">
+      <label for="doc-ipt-secret-1">小程序secret<span style="color:red;">(非技术人员勿动)</span></label>
+      <input type="text" class="" id="doc-ipt-secret-1" name="secret" value="{$data.secret}"  placeholder="小程序secret" />
+    </div>
+
+    <div class="am-form-group">
+      <label for="doc-ipt-mch_id-1">小程序商户id<span style="color:red;">(非技术人员勿动)</span></label>
+      <input type="text" class="" id="doc-ipt-mch_id-1" name="mch_id" value="{$data.mch_id}"  placeholder="小程序商户id" />
+    </div>
+
+    <div class="am-form-group">
+      <label for="doc-ipt-mch_secret-1">小程序密钥<span style="color:red;">(非技术人员勿动)</span></label>
+      <input type="text" class="" id="doc-ipt-mch_secret-1" name="mch_secret" value="{$data.mch_secret}"  placeholder="小程序商户API安全密钥" />
+    </div>
+
+    <div class="am-form-group am-form-file">
+      <label for="doc-ipt-file-2">apiclient_cert.p12<span style="color:red;">(非技术人员勿动)</span></label>
+      <div>
+        <button type="button" class="am-btn am-btn-default am-btn-sm">
+          <i class="am-icon-cloud-upload"></i> 选择要上传的文件 现存：{$data.apiclient_cert_p12}</button>
+      </div>
+      <input type="file" id="doc-ipt-file-2" name="apiclient_cert_p12">
+    </div>
+
+    <div class="am-form-group am-form-file">
+      <label for="doc-ipt-file-2">apiclient_cert.pem<span style="color:red;">(非技术人员勿动)</span></label>
+      <div>
+        <button type="button" class="am-btn am-btn-default am-btn-sm">
+          <i class="am-icon-cloud-upload"></i> 选择要上传的文件 现存：{$data.apiclient_cert_pem}</button>
+      </div>
+      <input type="file" id="doc-ipt-file-2" name="apiclient_cert_pem">
+    </div>
+
+    <div class="am-form-group am-form-file">
+      <label for="doc-ipt-file-2">apiclient_key.pem<span style="color:red;">(非技术人员勿动)</span></label>
+      <div>
+        <button type="button" class="am-btn am-btn-default am-btn-sm">
+          <i class="am-icon-cloud-upload"></i> 选择要上传的文件 现存：{$data.apiclient_key_pem}</button>
+      </div>
+      <input type="file" id="doc-ipt-file-2" name="apiclient_key_pem">
+    </div>
+
+    <div class="am-form-group am-form-file">
+      <label for="doc-ipt-file-2">rootca.pem<span style="color:red;">(非技术人员勿动)</span></label>
+      <div>
+        <button type="button" class="am-btn am-btn-default am-btn-sm">
+          <i class="am-icon-cloud-upload"></i> 选择要上传的文件 现存：{$data.rootca_pem}</button>
+      </div>
+      <input type="file" id="doc-ipt-file-2" name="rootca_pem">
+    </div>
+
+    <div class="am-form-group">
+      <label for="doc-ipt-successful-1">小程序订单确认成功模板消息通知id<span style="color:red;">(非技术人员勿动)</span></label>
+      <input type="text" class="" id="doc-ipt-successful-1" name="successful_notice" value="{$data.successful_notice}"  placeholder="小程序订单确认成功模板消息通知id" />
+    </div>
+
+    <div class="am-form-group">
+      <label for="doc-ipt-failure-1">小程序订单拒绝或失败模板消息通知id<span style="color:red;">(非技术人员勿动)</span></label>
+      <input type="text" class="" id="doc-ipt-failure-1" name="failure_notification" value="{$data.failure_notification}"  placeholder="小程序订单拒绝或失败模板消息通知id" />
+    </div>
+
+    <div class="am-form-group">
+      <label for="doc-ipt-name-1">门店名称</label>
+      <input type="text" class="" id="doc-ipt-name-1" name="store_name" value="{$data.store_name}"  placeholder="店铺名称" />
+    </div>
+
+    <div class="am-form-group">
+      <label for="doc-ipt-address-1">门店地址</label>
+      <input type="text" class="" id="doc-ipt-address-1" name="store_address" value="{$data.store_address}"  placeholder="请输入门店地址" />
+    </div>
+    
+    <div class="am-form-group">
+      <label for="doc-ipt-phone-1">服务热线</label>
+      <input type="text" class="" id="doc-ipt-phone-1" name="store_phone" value="{$data.store_phone}"  placeholder="请输入服务热线" />
+    </div>
+
+    <div class="am-form-group">
+      <label for="doc-ipt-url-1">官方网站</label>
+      <input type="text" class="" id="doc-ipt-url-1" name="store_url" value="{$data.store_url}"  placeholder="请输入官方网站地址">
+    </div>
+    
+    <div class="am-form-group">
+      <label for="doc-ipt-message-1">留言提示</label>
+      <input type="text" class="" id="doc-ipt-message-1" name="order_message_placeholder" value="{$data.order_message_placeholder}"  placeholder="留言提示字">
+    </div>
+
+
+    <div class="am-radio">
+      <label>
+        <input type="radio" name="pay_status" value="1" <?php if($data['pay_status'] == 1){echo 'checked';}?> />
+        微信支付 - 开启
+      </label>
+    </div>
+
+    <div class="am-radio">
+      <label>
+        <input type="radio" name="pay_status" value="0" <?php if($data['pay_status'] == 0){echo 'checked';}?> >
+        微信支付 - 关闭
+      </label>
+    </div>
+
+  </div>
+</div>
+
+<div class="am-panel am-panel-primary">
+  <div class="am-panel-hd">手机通知(帐号请联系极速上线技术人员)</div>
+  <div class="am-panel-bd">
+    <div class="am-radio">
+      <label>
+        <input type="radio" name="sms_switch" value="1" <?php if($data['sms_switch'] == 1){echo 'checked';}?> />
+        短信通知-开启
+      </label>
+    </div>
+
+    <div class="am-radio">
+      <label>
+        <input type="radio" name="sms_switch" value="0" <?php if($data['sms_switch'] == 0){echo 'checked';}?> >
+        短信通知-关闭
+      </label>
+    </div>
+    
+    <div class="am-form-group">
+      <label for="doc-ipt-phone-2">通知的手机号</label>
+      <input type="text" class="" id="doc-ipt-phone-2" name="sms_phone" value="{$data.sms_phone}"  placeholder="请输入通知的手机号码" pattern="^1[3-9]\d{9}$">
+    </div>
+
+    <div class="am-form-group">
+      <label for="doc-ipt-sms_signature-2">短信平台短信签名</label>
+      <input type="text" class="" id="doc-ipt-sms_signature-2" name="sms_signature" value="{$data.sms_signature}"  placeholder="请输入通知的短信签名">
+    </div>
+    
+    <div class="am-form-group">
+      <label for="doc-ipt-account_number-1">短信平台API帐号<span style="color:red;">(非技术人员勿动)</span></label>
+      <input type="text" class="" id="doc-ipt-account_number-1" name="sms_account_number" value="{$data.sms_account_number}"  placeholder="短信平台的API帐号" />
+    </div>
+
+    <div class="am-form-group">
+      <label for="doc-ipt-sms_password-1">短信平台API密钥<span style="color:red;">(非技术人员勿动)</span></label>
+      <input type="text" class="" id="doc-ipt-sms_password-1" name="sms_password" value="{$data.sms_password}"  placeholder="短信平台API密钥" />
+    </div>
+
+  </div>
+</div>
+
+<div class="am-panel am-panel-primary">
+  <div class="am-panel-hd">邮箱通知</div>
+  <div class="am-panel-bd">
+    <div class="am-radio">
+      <label>
+        <input type="radio" name="email_switch" value="1" <?php if($data['email_switch'] == 1){echo 'checked';}?> />
+        邮箱通知-开启
+      </label>
+    </div>
+
+    <div class="am-radio">
+      <label>
+        <input type="radio" name="email_switch" value="0" <?php if($data['email_switch'] == 0){echo 'checked';}?> >
+        邮箱通知-关闭
+      </label>
+    </div>
+    
+    <div class="am-form-group">
+      <label for="doc-ipt-email-2">通知邮箱</label>
+      <input type="text" class="" id="doc-ipt-email-2" name="email_to" value="{$data.email_to}"  placeholder="请输入需要通知的邮箱">
+    </div>
+
+  </div>
+</div>
+
+{php} if(in_array(3,$added)){ {/php}
+<div class="am-panel am-panel-primary">
+  <div class="am-panel-hd">营销设置</div>
+  <div class="am-panel-bd">
+    <div class="am-form-group">
+      <label for="doc-ipt-share_integral-2">分享新用户进入获得积分</label>
+      <input type="number" class="" min="0" id="doc-ipt-share_integral-2" name="share_integral" value="{$data.share_integral}"  placeholder="请输入分享新用户进入获得积分">
+    </div>
+    <div class="am-form-group">
+      <label for="doc-ipt-sign_in_integral-2">签到获得积分</label>
+      <input type="number" class="" min="0" id="doc-ipt-sign_in_integral-2" name="sign_in_integral" value="{$data.sign_in_integral}"  placeholder="签到获得的积分">
+    </div>
+  </div>
+</div>
+{php} } {/php}
+<div class="am-panel am-panel-primary">
+  <div class="am-panel-hd">联系我们页面内容</div>
+  <div class="am-panel-bd">
+    <div class="am-form-group">
+        <script id="container" name="store_we" type="text/plain" style="width: 300px;">{:htmlspecialchars_decode($data.store_we)}</script>
+        
+        <script type="text/javascript" src="__ROOT__/static/UEditor/ueditor.config.js"></script>
+        <!-- 编辑器源码文件 -->
+        <script type="text/javascript" src="__ROOT__/static/UEditor/ueditor.all.js"></script>
+
+        <script type="text/javascript">
+            var ue = UE.getEditor('container');
+        </script>
+    </div>
+  </div>
+</div>
+
+<div class="am-panel am-panel-primary">
+  <div class="am-panel-hd">门店地址选择(检索仅供搜索，最后还需点击选择地点)</div>
+  <div class="am-panel-bd" >
+  	<div class="am-g am-g-collapse">
+	  <div class="am-u-lg-7">
+	    <div class="am-input-group">
+	      <span class="am-input-group-btn">
+	        <button class="am-btn am-btn-default" type="button" onclick="searchKeyword()"><span class="am-icon-search"></span> </button>
+	      </span>
+	      <input type="text" id="keyword" class="am-form-inline" placeholder="关键字">
+
+	    </div>
+	  </div>
+	  <div class="am-u-lg-5">
+	  	<input type="text" id="region" class="am-form-inline" placeholder="城市（如 深圳）">
+	  </div>
+	</div>
+	<br>
+    <div id="maps" style="height: 500px;">
+    	
+    </div>
+  </div>
+</div>
+
+<center><button type="submit" class="am-btn am-btn-secondary am-round" style="width:50%;">修改</button></center>
+
+    </div>
+    
+</div>
+<input type="hidden" name="store_coord" value="{$data.store_coord}" id="coord">
+</form>
+
+
+
+
+{include file="public/footer" /}
+</body>
+<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp"></script>
+<script>
+	var map,markersArray = [];
+	var init_coord = $('#coord').val();
+	var center = init_coord.split(',');
+	var thecenter = new qq.maps.LatLng(center[0],center[1]);
+	if(init_coord){
+		var map = new qq.maps.Map(document.getElementById("maps"),{
+	        center: thecenter,
+	        zoom: 13
+	    });
+	    var marker = new qq.maps.Marker({
+	        position: thecenter,
+	        map: map
+	    });
+	    markersArray.push(marker);	
+	}else{
+		var map = new qq.maps.Map(document.getElementById("maps"),{
+	        center: new qq.maps.LatLng(22.63979,114.01320),
+	        zoom: 13
+	    });	
+	}
+
+	var latlngBounds = new qq.maps.LatLngBounds();
+    //调用Poi检索类
+    searchService = new qq.maps.SearchService({
+        complete : function(results){
+            var pois = results.detail.pois;
+            for(var i = 0,l = pois.length;i < l; i++){
+                var poi = pois[i];
+                latlngBounds.extend(poi.latLng);  
+                var marker = new qq.maps.Marker({
+                    map:map,
+                    position: poi.latLng
+                });
+
+                marker.setTitle(i+1);
+
+                markersArray.push(marker);
+            }
+            map.fitBounds(latlngBounds);
+        }
+    });
+
+    function searchKeyword() {
+	    var keyword = document.getElementById("keyword").value;
+	    var region = document.getElementById("region").value;
+	    clearOverlays();
+	    searchService.setLocation(region);
+	    searchService.search(keyword);
+	 }
+	
+
+    qq.maps.event.addListener(map,'click',function(event) {
+        var latLng = event.latLng,
+            lat = latLng.getLat().toFixed(5),
+            lng = latLng.getLng().toFixed(5);
+        var coord = lat+','+lng;
+        clearOverlays();
+        $('#coord').val(coord);
+        console.log($('#coord').val());
+        addMarker(latLng);
+    })
+
+    //添加标记
+	function addMarker(location) {
+	    var marker = new qq.maps.Marker({
+	        position: location,
+	        map: map
+	    });
+	    markersArray.push(marker);
+	}
+
+	//清除地图上的marker
+	function clearOverlays(){
+	    if (markersArray) {
+	        for (i in markersArray) {
+	            markersArray[i].setMap(null);
+	        }
+	        markersArray.length = 0;
+	    }
+	}
+
+</script>
+</html>
