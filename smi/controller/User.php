@@ -29,7 +29,7 @@ class User extends Base
         -> field('s.create_time,u.nickname,u.picture')
         -> alias('s')
         -> join('order_user u',"s.uid=u.id AND s.admin_id={$adminId}")
-        -> order('s.id')
+        -> order('s.id DESC')
         -> paginate(10);
 
         $data = $list -> all();

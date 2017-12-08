@@ -49,6 +49,7 @@ class Index extends Base
             $data['email_to'] = input('post.email_to');
             $data['share_integral'] = input('post.share_integral');
             $data['sign_in_integral'] = input('post.sign_in_integral');
+            $data['lottery_integral'] = input('post.lottery_integral');
             
             if(input('post.userpass')){
                 $data['userpass'] = md5(input('post.userpass'));
@@ -123,7 +124,7 @@ class Index extends Base
         }else{
             
             $data = db('Admin') 
-            -> field('appid,secret,successful_notice,failure_notification,store_name,store_address,store_phone,store_url,pay_status,store_we,store_coord,mch_id,mch_secret,apiclient_cert_p12,apiclient_cert_pem,apiclient_key_pem,rootca_pem,sms_switch,sms_phone,sms_account_number,sms_password,order_message_placeholder,sms_signature,email_switch,email_to,share_integral,sign_in_integral') 
+            -> field('appid,secret,successful_notice,failure_notification,store_name,store_address,store_phone,store_url,pay_status,store_we,store_coord,mch_id,mch_secret,apiclient_cert_p12,apiclient_cert_pem,apiclient_key_pem,rootca_pem,sms_switch,sms_phone,sms_account_number,sms_password,order_message_placeholder,sms_signature,email_switch,email_to,share_integral,sign_in_integral,lottery_integral') 
             -> find($adminId);
 
             $this -> assign('data',$data);

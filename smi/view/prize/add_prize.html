@@ -1,0 +1,80 @@
+<!doctype html>
+<html class="no-js">
+<head>
+<style type="text/css">
+    .am-table th,td{text-align: center;}
+</style>
+{include file="public/head" /}
+
+</head>
+<body>
+
+{include file="public/header" /}
+
+<div class="am-cf admin-main">
+
+{include file="public/sidebar" nav="shop"/}
+
+<div class="admin-content">
+    <div class="admin-content-body">
+
+<div class="am-cf am-padding am-padding-bottom-0">
+            
+    <div class="am-g">
+        <div class="am-u-sm-7">
+            <strong class="am-text-primary am-text-lg">大转盘管理</strong> / <small>添加奖品</small>
+        </div>
+        <div class="am-u-sm-4">
+            
+        </div>
+        <div class="am-u-sm-1">
+           
+        </div>
+    </div>
+</div>
+<hr>
+<form class="am-form" method="post" action="{:url('Prize/AddPrize')}" enctype="multipart/form-data" >
+<div class="am-panel am-panel-primary">
+  <div class="am-panel-hd">奖品基本信息</div>
+  <div class="am-panel-bd">
+
+    <div class="am-form-group">
+      <label for="doc-ipt-name-1">奖品名称</label>
+      <input type="text" class="" id="doc-ipt-name-1" name="name" placeholder="请输入奖品名称" required >
+    </div>
+
+    <div class="am-form-group">
+      <label for="doc-ipt-stock-1">奖品库存</label>
+      <input type="number" step="1" min="0" class="" id="doc-ipt-stock-1" name="stock" placeholder="请输入奖品的数量库存" required >
+    </div>
+    
+    <div class="am-form-group">
+      <label for="doc-ipt-probability-1">中奖概率</label>
+      <div class="am-input-group">
+        <input type="number" step="0.00001" min="0" max="100" class="" id="doc-ipt-probability-1" name="probability" placeholder="请输入奖品的中奖概率" required >
+        <span class="am-input-group-label">%</span>
+      </div>
+    </div>
+
+    <div class="am-form-group am-form-file">
+      <label for="doc-ipt-file-2">奖品图片</label>
+      <div>
+        <button type="button" class="am-btn am-btn-default am-btn-sm">
+          <i class="am-icon-cloud-upload"></i> 选择要上传的文件</button>
+      </div>
+      <input type="file" id="doc-ipt-file-2" required name="picture[]">
+    </div>
+
+  </div>
+</div>
+
+
+<center><button type="submit" class="am-btn am-btn-secondary am-round" style="width:50%;">添加</button></center>
+</form>
+</div>
+ </div>
+
+  </div>
+{include file="public/footer" /}
+</body>
+</html>

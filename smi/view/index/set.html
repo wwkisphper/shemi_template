@@ -228,6 +228,12 @@
       <label for="doc-ipt-sign_in_integral-2">签到获得积分</label>
       <input type="number" class="" min="0" id="doc-ipt-sign_in_integral-2" name="sign_in_integral" value="{$data.sign_in_integral}"  placeholder="签到获得的积分">
     </div>
+    {php} if(in_array(4,$added)){ {/php}
+    <div class="am-form-group">
+      <label for="doc-ipt-lottery_integral-2">抽大转盘所需积分</label>
+      <input type="number" class="" min="0" id="doc-ipt-lottery_integral-2" name="lottery_integral" value="{$data.lottery_integral}"  placeholder="大转盘所需积分">
+    </div>
+    {php} } {/php}
   </div>
 </div>
 {php} } {/php}
