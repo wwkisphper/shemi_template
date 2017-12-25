@@ -1,0 +1,160 @@
+  <!doctype html>
+  <html class="no-js">
+  <head>
+    {include file="public/head" /}
+    <style type="text/css">
+      .am-form{width:500px;margin-left:20px;float: left;}
+      #editor {font-size: 12px;}
+      .am-form label span{font-size: 13px;font-weight:normal;}
+    </style>
+
+  </head>
+  <body>
+
+  {include file="public/header" /}
+
+  <div class="am-cf admin-main">
+
+    <!-- sidebar start -->
+    {include file="public/sidebar" nav="cash_goods_shop"/}
+    <!-- sidebar end -->
+
+    <!-- content start -->
+    <div class="content-page">
+      <div class="content">
+        <div class="card-box" style="overflow: hidden">
+          <div class="am-cf am-padding">
+            <div class="am-fl am-cf">
+              <strong class="am-text-primary am-text-lg">商品管理</strong> /
+              <small>商品分类管理 / 编辑</small>
+            </div>
+          </div>
+          <hr style="margin-top:0px;">
+          <div style="width: auto;height: auto;">
+            <form class="am-form" action="" method="POST" id="saveForm" enctype="multipart/form-data" style="clear: both">
+
+              <input type="hidden" name="op" value="save" />
+
+              <input type="hidden" name="id" value="{$id}" />
+              <div class="am-form-group am-form-inline">
+                <div class="am-form-group">
+                  <label>排序<span>（数字越大排序越靠前）</span></label>
+                  <input type="text" name="seat_no" value="{$cat.seat_no}">
+                </div>
+                <div class="am-form-group" style="margin-left:5px;float: right;width: 70px">
+                  <label style="margin-left: 10px;margin-top: 7px">状态</label>
+                  <div class="ttt-switch" style="float: left;margin-top: 7px">
+                    <input type="checkbox" name="status" <?php if($cat['status']) echo "checked";?>>
+                    <span class="ttt-switch-btn"></span>
+                  </div>
+                </div>
+                <div class="am-form-group" style="margin-left:5px;float: right;">
+                  <label style="margin-left: 10px;margin-top: 7px">上首页</label>
+                  <div class="ttt-switch" style="float: left;margin-top: 7px">
+                    <input type="checkbox" name="home_show" <?php if($cat['home_show']) echo "checked";?>>
+                    <span class="ttt-switch-btn"></span>
+                  </div>
+                </div>
+              </div>
+              <!--<div class="am-form-group">-->
+                <!--<label>分类上级</label>-->
+                <!--<select name="pid" >-->
+                  <!--<option value="0">一级分类</option>-->
+                  <!--<?php foreach($pid_lists as $i=>$val){?>-->
+                  <!--<option value="<?php echo $val['id'] ?>" <?php if($val['id']==$cat['pid']){?> selected = "selected" <?php } ?> ><?php echo $val['title'] ?></option>-->
+                  <!--<?php } ?>-->
+                <!--</select>-->
+              <!--</div>-->
+              <div class="am-form-group">
+                <label>分类名称</label>
+                <input type="text" name="title" value="{$cat.title}">
+              </div>
+              <div class="am-form-group">
+                <label>分类链接地址</label>
+                <input type="text" name="link" value="{$cat.link}">
+              </div>
+              <div class="am-form-group">
+                <label>分类首页推文</label>
+                <input type="text" name="title2" value="{$cat.title2}">
+              </div>
+              <!--<div class="am-form-group">-->
+                <!--<label>分类图片<if condition="$cat[id]"><span>（若不修改请留空）</span></if></label>-->
+                <!--<input type="file" name="img" value="{$cat.img}" accept="image/jpg,image/jpeg,image/png">-->
+              <!--</div>-->
+              <div class="am-form-group am-form-file">
+                <label for="doc-ipt-file-2">分类图片<if condition="$cat[id]"><span>（若不修改请留空）</span></label>
+                <div>
+                  <button type="button" class="am-btn am-btn-default am-btn-sm">
+                    <i class="am-icon-cloud-upload"></i> 选择要上传的文件 现存：{$cat.img}</button>
+                </div>
+                <input type="file" id="doc-ipt-file-2"  value="{$cat.img}" name="img[]">
+              </div>
+              <div class="am-form-group">
+                <label>图片链接地址</label>
+                <input type="text" name="url" value="{$cat.url}">
+              </div>
+
+              <button type="button" class="am-btn am-btn-default" id="form_submit">保存</button>
+
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <script type="text/javascript">
+          function layert(content){ layer.open({title:'',content:content,shade:0.2}); }
+          $(function(){
+              $("#form_submit").on('click',function(){
+                  // var type = $("select[name=type] option:selected").val();
+                  // var brand_id = $("select[name=brand_id] option:selected").val();
+                  // var title = $("input[name=title]").val();
+                  // var content = ue.getContent();
+                  // if(!type) layert('请选择分类');
+                  // else if(!brand_id)layert('请选择品牌');
+                  // else if(!title)layert('请填写标题');
+                  // else if(!content)layert('请填写内容');
+                  // else $("#saveForm").submit();
+                  $("#saveForm").submit();
+              });
+          });
+      </script>
+      <footer class="admin-content-footer"><hr></footer>
+    </div>
+    <!-- content end -->
+  </div>
+
+  {include file="public/footer" /}
+  <script type="text/html" id="add_coupon_tpl">
+    <form action="{:url('attr_op')}" class="am-form" style="padding: 1rem 5rem;" method="POST">
+      <input type="hidden" name="op" value="save">
+      <div class="am-form-group">
+        <label>属性名称</label>
+        <input type="text" name="title">
+      </div>
+      <div class="am-form-group">
+        <label>属性排序</label>
+        <input type="text" name="sort">
+      </div>
+      <div class="am-form-group">
+        <label>属性状态</label>
+        <select name="status" >
+          <option value="1">显示</option>
+          <option value="0">隐藏</option>
+        </select>
+      </div>
+      <button class="am-btn am-btn-secondary">保存</button>
+    </form>
+  </script>
+  <script type="text/javascript">
+      $('.add-attr').on('click',function(){
+          layer.open({
+              type: 1,
+              title: '新增商品属性',
+              closeBtn: 1,
+              shadeClose: true,
+              content: $("#add_coupon_tpl").html()
+          });
+      });
+  </script>
+  </body>
+  </html>

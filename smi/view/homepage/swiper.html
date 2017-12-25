@@ -1,0 +1,197 @@
+ <!doctype html>
+  <html class="no-js">
+  <head>
+    <style type="text/css">
+      a.am-text-secondary:visited{color:#3bb4f2;}
+      a.am-text-danger:visited{color:#dd514c;}
+      .am-btn-default {background-color: #fff;}
+      th {text-align:center;}
+      tr td{text-align:center;}
+      select{padding: 4px;border: 1px solid #ccc;}
+      .am-popup-bd {background:#fff;}
+      .am-popup-bd img {max-width: 100%}
+      .am-u-sm-2 {border-top: 1px solid #ddd;margin-top: 10px;}
+      .am-u-sm-10 {border-left: 1px solid #ddd;margin-top: 10px;}
+      .am-table>tbody>tr>td.user-info {padding: 1px;text-align: left;}
+      .am-table>tbody>tr>td.user-info img{height: 42px}
+      myred{color:red;}
+      mygreen {color:#1aad19;}
+      mygery {color:#999;}
+      .wxgreen {color:#1aad19;}
+      #add_swiper_form {display: none}
+      .am-form input[type=text][readonly]{
+        border:0;
+        padding: 0;
+        height: 25px;
+        cursor: text;
+        background-color: #fff;
+      }
+    </style>
+    {include file="public/head" /}
+
+  </head>
+  <body>
+
+  {include file="public/header" /}
+
+  <div class="am-cf admin-main">
+    {include file="public/sidebar" nav="cash_goods_shop"/}
+    <div class="content-page">
+      <div class="content">
+        <div class="card-box">
+          <div class="am-cf am-padding">
+            <div class="am-fl am-cf">
+              <strong class="am-text-primary am-text-lg">首页管理</strong> /
+              <small>轮播管理</small>
+            </div>
+          </div>
+          <hr style="margin-top:0px;">
+          <div class="am-g">
+            <div class="am-u-sm-12">
+              <div class="am-panel am-panel-default">
+                <div class="am-panel-hd" style="line-height:14px;">
+                  <h4 class="am-panel-title am-collapsed" data-am-collapse="{target: '#attention_content'}">注意事项</h4>
+                </div>
+                <div id="attention_content" class="am-panel-collapse am-collapse">
+                  <div class="am-panel-bd" style="font-size:14px;padding:5px 10px;">1、排序值越大，排序越靠前。<br>2、新增轮播时，“轮播图片”必填，修改轮播时，若不修改“轮播图片”，请留空，原图片不会被修改。</div>
+                </div>
+              </div>
+              <script type="text/javascript">
+                  $(function(){
+                      if(!sessionStorage.getItem('first_open_homepage_swiper')){
+                          $("#attention_content").collapse('open');
+                          setTimeout(function(){
+                              $("#attention_content").collapse('close');
+                              sessionStorage.setItem('first_open_homepage_swiper',true);
+                          },800);
+                      }
+                  });
+              </script>
+            </div>
+          </div>
+
+          <div class="am-g">
+            <div class="am-u-sm-6" style="width:600px">
+              <form class="am-form am-scrollable-horizontal">
+                <table class="am-table am-table-bordered">
+                  <thead>
+                  <tr>
+                    <th width="10%">排序</th>
+                    <th width="20%">图片</th>
+                    <th width="40%">链接</th>
+                    <th width="20%">操作</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {if condition="!$swiper"}
+                  <tr><td colspan="6" style="text-align:center;">这里啥都没有</td></tr>
+                  {/if}
+                  {volist name="swiper" id="vo" key="k"}
+                  <tr>
+                    <td>{$vo.seat_no}</td>
+                    <td style="padding:0">
+                      <img src="__ROOT__/uploads/{$vo.img}" style="height:40px">
+                    </td>
+                    <td><input type="text" value="{$vo.link}" readonly></td>
+                    <td style="padding:.45rem;">
+
+                      <a href="javascript:;" class="am-btn am-btn-default am-btn-xs edit_swiper" data-seat-no="{$vo.seat_no}" data-id="{$vo.id}" data-link="{$vo.link}">编辑</a>
+                      <a href="{:url('swiper_op')}?op=dele&id={$vo.id}" class="am-btn am-btn-danger am-btn-xs" onclick="return confirm('确定要删除吗？')">删除</a>
+
+                    </td>
+                  </tr>
+                  {/volist}
+                  </tbody>
+                </table>
+                <!-- <input type="button" class="am-btn am-btn-primary" value="保存排序"> -->
+              </form>
+              <script type="text/javascript">
+                  $(function(){
+                      $('.edit_swiper').on('click',function(){
+                          var id = $(this).data('id');
+                          var seat_no = $(this).data('seat-no');
+                          var link = $(this).data('link');
+                          $('input[name=id]').val(id);
+                          $('input[name=seat_no]').val(seat_no);
+                          $('input[name=link]').val(link);
+                          $('#edit_swiper').html('编辑轮播图');
+                          $('#edit_swiper').show();
+                          $('#add_swiper_form').show();
+                      });
+                  });
+              </script>
+              <div class="am-cf">
+                <div class="am-fr">
+                  {$swiper->render()}
+                </div>
+              </div>
+            </div>
+            <div class="am-u-sm-5" style="width:350px">
+              <button type="button" class="am-btn am-btn-default" id="add_swiper">
+                <span class="am-icon-plus"> 新增轮播</span>
+              </button><br>
+              <button type="button" class="am-btn am-btn-default" id="edit_swiper" style="display: none;margin-top:10px"></button>
+              <form class="am-form am-scrollable-horizontal" action="{:url('swiper_op')}" method="POST" enctype="multipart/form-data" id="add_swiper_form">
+                <input type="hidden" name="op" value="save">
+                <input type="hidden" name="id" value="">
+                <table class="am-table am-table-bordered">
+                  <tr><td>
+                    <div class="am-input-group am-input-group-sm">
+                      <span class="am-input-group-label">排 序</span>
+                      <input type="text" name="seat_no" class="am-form-field">
+                    </div>
+                  </td></tr>
+                  <tr><td><input type="file" name="img" accept="image/jpg,image/jpeg,image/png"></td></tr>
+                  <tr><td>
+                    <div class="am-input-group am-input-group-sm">
+                      <span class="am-input-group-label">链 接</span>
+                      <input type="text" name="link" class="am-form-field">
+                    </div>
+                  </td></tr>
+                  <tr><td>
+                    <input type="button" class="am-btn am-btn-primary am-btn-sm" id="add_swiper_submit" value="提交">
+                    <input type="button" class="am-btn am-btn-default am-btn-sm" id="add_swiper_cancel" value="取消">
+                  </td></tr>
+                </table>
+              </form>
+            </div>
+            <div class="am-u-sm-1"></div>
+          </div>
+        </div>
+      </div>
+      <footer class="admin-content-footer">
+        <hr>
+      </footer>
+    </div>
+
+  </div>
+
+    {include file="public/footer" /}
+  </body>
+  <script type="text/javascript">
+      $(function(){
+          function layert(content){ layer.open({title:'',content:content,shade:0.2}); }
+          $('#add_swiper').on('click',function(){
+              $('input[name=id]').val('');
+              $('#add_swiper_form')[0].reset();
+              $('#add_swiper_form').show();
+              $('#edit_swiper').hide();
+          });
+          $('#add_swiper_cancel').on('click',function(){
+              $('input[name=id]').val('');
+              $('#add_swiper_form')[0].reset();
+              $('#add_swiper_form').hide();
+              $('#edit_swiper').hide();
+          });
+          var flag = 0;
+          $('#add_swiper_submit').on('click',function(){
+              if(flag == 1){layert('上传中，请稍候');return false;}
+              var id = $('input[name=id]').val();
+              var img = $('input[name=img]')[0].value;
+              if(!id && !img){layert('请上传轮播图片');return false;}
+              flag = 1;
+              $('#add_swiper_form').submit();
+          });
+      });
+  </script>
+  </html>

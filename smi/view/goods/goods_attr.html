@@ -1,0 +1,190 @@
+ <!doctype html>
+  <html class="no-js">
+  <head>
+    {include file="public/head" /}
+    <style type="text/css">
+      a.am-text-secondary:visited{color:#3bb4f2;}
+      a.am-text-danger:visited{color:#dd514c;}
+      .am-btn-default {background-color: #fff;}
+      th {text-align:center;}
+      tr td{text-align:center;}
+      select{padding: 4px;border: 1px solid #ccc;}
+      .am-popup-bd {background:#fff;}
+      .am-popup-bd img {max-width: 100%}
+      .am-u-sm-2 {border-top: 1px solid #ddd;margin-top: 10px;}
+      .am-u-sm-10 {border-left: 1px solid #ddd;margin-top: 10px;}
+      .am-table>tbody>tr>td.user-info {padding: 1px;text-align: left;}
+      .am-table>tbody>tr>td.user-info img{height: 42px}
+      myred{color:#dd514c;}
+      mygreen {color:#1aad19;}
+      mygery {color:#999;}
+      .wxgreen {color:#1aad19;}
+      .search-div.am-input-group .am-form-field{width:120px;float: right;}
+      .search-div select {float: right;}
+      .ttt-switch {margin: 0 auto;}
+      .am-form select{
+        font-size: 1.2rem;
+        border-color: #e6e6e6;
+        width: unset;
+        padding: .5em 2em .5em 1em;
+        margin: 0 auto;
+      }
+      .am-table>tbody>tr>td.td-img {
+        padding: 1px;
+        text-align: left;
+      }
+      .am-table>tbody>tr>td.td-img img {
+        height: 42px;
+        float: right;
+      }
+    </style>
+  </head>
+  <body>
+
+  {include file="public/header" /}
+
+  <div class="am-cf admin-main">
+
+    <!-- sidebar start -->
+    {include file="public/sidebar" nav="cash_goods_shop"/}
+    <!-- sidebar end -->
+
+    <!-- content start -->
+    <div class="admin-content">
+      <div class="admin-content-body">
+        <div class="am-cf am-padding">
+          <div class="am-fl am-cf">
+            <strong class="am-text-primary am-text-lg">商品管理</strong> /
+            <small>商品列表</small>
+          </div>
+        </div>
+        <hr style="margin-top:0px;">
+
+        <div class="am-g">
+          <div class="am-u-sm-12 am-u-md-4">
+            <?php if($auth){ ?>
+            <div class="am-btn-toolbar">
+              <div class="am-btn-group am-btn-group-xs">
+                <a class="am-btn am-btn-secondary add-attr" href="javascript:;">
+                  <span class="am-icon-plus"> 新增商品属性 </span></a>
+              </div>
+              <div class="am-btn-group am-btn-group-xs">
+                <a class="am-btn am-btn-default" href="{:U('goods')}?op=export">
+                  <span class="am-icon-file-excel-o"> 导出到Excel </span></a>
+              </div>
+            </div>
+            <?php } ?>
+          </div>
+          <form class="am-form-group am-u-sm-12 am-u-md-8">
+            <div class="am-input-group am-input-group-sm search-div">
+              <input type="text" class="am-form-field" name="title" placeholder="商品名称/型号" value="{$_GET['title']}">
+              <select name="type" style="width:100px;float:right;">
+                <option value="">全部商品</option>
+                <option value="1">预约商品</option>
+                <option value="2">下架商品</option>
+              </select>
+              <span class="am-input-group-btn">
+            <button class="am-btn am-btn-default" type="submit">搜索</button>
+          </span>
+              <script type="text/javascript">
+                  $(function(){
+                  <?php if($_GET[type]) echo '$("select[name=type]").val("'.$_GET[type].'");';?>
+                  });
+              </script>
+            </div>
+          </form>
+        </div>
+
+        <div class="am-g">
+          <div class="am-u-sm-12">
+            <form class="am-form am-scrollable-horizontal">
+              <table class="am-table table-main am-text-nowrap">
+                <thead>
+                <tr>
+                  <th width="5%">排序</th>
+                  <th width="5%">属性ID</th>
+                  <th width="10%" style="text-align: left;">属性名称</th>
+                  <th width="5%">状态</th>
+                  <th width="10%">上架时间</th>
+                  <th width="5%">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <if condition="!$list">
+                  <tr><td colspan="16" style="text-align:center;">这里啥都没有</td></tr>
+                </if>
+                <volist name="list" id="vo" key="k">
+                  <tr>
+                    <td>{$vo.sort}</td>
+                    <td>{$vo.id}</td>
+                    <td style="text-align: left;">{$vo.title}</td>
+                    <td>
+                      <?php
+                    if($vo['status']==1){
+                        echo "<mygreen>显示</mygreen>";
+                      }else echo "<mygery>隐藏</mygery>";
+                      ?>
+                    <td><?php echo date('Y-m-d H:i',$vo['addtime']) ?></td>
+                    <td style="padding:.45rem;">
+
+
+
+                      <?php if($auth){ ?>
+                      <a href="{:U('attr_op')}?op=up&id={$vo.id}" class="am-btn am-btn-default am-btn-xs" onclick="return confirm('确定显示吗')">显示</a>
+                      <a href="{:U('attr_op')}?op=dowm&id={$vo.id}" class="am-btn am-btn-default am-btn-xs" onclick="return confirm('确定隐藏吗')">隐藏</a>
+                      <a href="{:U('attr_op')}?op=dele&id={$vo.id}" class="am-btn am-btn-danger am-btn-xs" onclick="return confirm('确定删除吗')">删除</a>
+                      <?php } ?>
+                    </td>
+                  </tr>
+                </volist>
+                </tbody>
+              </table>
+            </form>
+            <div class="am-cf">
+              <div class="am-fr">
+                {$page}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="admin-content-footer"><hr></footer>
+    </div>
+    <!-- content end -->
+  </div>
+
+  {include file="public/footer" /}
+  <script type="text/html" id="add_coupon_tpl">
+    <form action="{:U('attr_op')}" class="am-form" style="padding: 1rem 5rem;" method="POST">
+      <input type="hidden" name="op" value="save">
+      <div class="am-form-group">
+        <label>属性名称</label>
+        <input type="text" name="title">
+      </div>
+      <div class="am-form-group">
+        <label>属性排序</label>
+        <input type="text" name="sort">
+      </div>
+      <div class="am-form-group">
+        <label>属性状态</label>
+        <select name="status" >
+          <option value="1">显示</option>
+          <option value="0">隐藏</option>
+        </select>
+      </div>
+      <button class="am-btn am-btn-secondary">保存</button>
+    </form>
+  </script>
+  <script type="text/javascript">
+      $('.add-attr').on('click',function(){
+          layer.open({
+              type: 1,
+              title: '新增商品属性',
+              closeBtn: 1,
+              shadeClose: true,
+              content: $("#add_coupon_tpl").html()
+          });
+      });
+  </script>
+  </body>
+  </html>

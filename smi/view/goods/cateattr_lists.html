@@ -1,0 +1,184 @@
+  <!doctype html>
+  <html class="no-js">
+  <head>
+    {include file="public/head" /}
+    <style type="text/css">
+      a.am-text-secondary:visited{color:#3bb4f2;}
+      a.am-text-danger:visited{color:#dd514c;}
+      .am-btn-default {background-color: #fff;}
+      th {text-align:center;}
+      tr td{text-align:center;}
+      select{padding: 4px;border: 1px solid #ccc;}
+      .am-popup-bd {background:#fff;}
+      .am-popup-bd img {max-width: 100%}
+      .am-u-sm-2 {border-top: 1px solid #ddd;margin-top: 10px;}
+      .am-u-sm-10 {border-left: 1px solid #ddd;margin-top: 10px;}
+      .am-table>tbody>tr>td.user-info {padding: 1px;text-align: left;}
+      .am-table>tbody>tr>td.user-info img{height: 42px}
+      myred{color:#dd514c;}
+      mygreen {color:#1aad19;}
+      mygery {color:#999;}
+      .wxgreen {color:#1aad19;}
+      .search-div.am-input-group .am-form-field{width:120px;float: right;}
+      .search-div select {float: right;}
+      .ttt-switch {margin: 0 auto;}
+      .am-form select{
+        font-size: 1.2rem;
+        border-color: #e6e6e6;
+        width: unset;
+        padding: .5em 2em .5em 1em;
+        margin: 0 auto;
+      }
+      .am-table>tbody>tr>td.td-img {
+        padding: 1px;
+        text-align: left;
+      }
+      .am-table>tbody>tr>td.td-img img {
+        height: 42px;
+        float: right;
+      }
+    </style>
+  </head>
+  <body>
+
+  {include file="public/header" /}
+
+  <div class="am-cf admin-main">
+
+    <!-- sidebar start -->
+    {include file="public/sidebar" nav="index"/}
+    <!-- sidebar end -->
+
+    <!-- content start -->
+    <div class="content-page">
+      <div class="content">
+        <div class="card-box" style="overflow: hidden">
+          <div class="am-cf am-padding">
+            <div class="am-fl am-cf">
+              <strong class="am-text-primary am-text-lg">商品管理</strong> /
+              <small>商品分类属性类型列表</small>
+            </div>
+          </div>
+          <hr style="margin-top:0px;">
+
+          <div class="am-g">
+            <div class="am-u-sm-12 am-u-md-4">
+              <div class="am-btn-toolbar">
+                <div class="am-btn-group am-btn-group-xs">
+                  <a class="am-btn am-btn-secondary add-attr" href="javascript:;">
+                    <span class="am-icon-plus"> 新增分类属性 </span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="am-g">
+            <div class="am-u-sm-12">
+              <form class="am-form am-scrollable-horizontal">
+                <table class="am-table table-main am-text-nowrap">
+                  <thead>
+                  <tr>
+                    <th width="10%">排序</th>
+                    <th width="10%" style="text-align: left;">属性类型名称</th>
+                    <th width="10%">操作</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {if condition="!$attr"}
+                    <tr><td colspan="6" style="text-align:center;">这里啥都没有</td></tr>
+                  {/if}
+                  {volist name="attr" id="vo"}
+
+                    <tr>
+                      <input type="hidden" id="val_id" value="{$vo.id}">
+                      <td>{$vo.sort}</td>
+                      <td style="text-align: left;">{$vo.title}</td>
+                      <td style="padding:.45rem;">
+                        <a href="{:url('cateattr_delete')}?id={$vo.id}" class="am-btn am-btn-default am-btn-xs">删除</a>
+                        <!-- <a href="{:url('goods_cat_op')}?op=edit&id={$vo.id}" class="am-btn am-btn-default am-btn-xs">编辑</a> -->
+                      </td>
+                    </tr>
+                  {/volist}
+                  </tbody>
+                </table>
+              </form>
+              <div class="am-cf">
+                <div class="am-fr">
+                  {$attr->render()}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="admin-content-footer"><hr></footer>
+    </div>
+    <!-- content end -->
+  </div>
+
+  {include file="public/footer" /}
+  <script type="text/html" id="aa">
+    <form action="{:url('cateattr_add')}" class="am-form" style="padding: 1rem 5rem;" method="POST">
+
+      <input type="hidden" name="cate_id" value="<?php echo $_GET['pid']; ?>">
+      <div class="am-form-group">
+        <label>分类属性名称</label>
+        <input type="text" name="title">
+      </div>
+      <div class="am-form-group">
+        <label>排序</label>
+        <input type="text" name="sort">
+      </div>
+      <button class="am-btn am-btn-secondary">保存</button>
+    </form>
+  </script>
+
+  <script type="text/javascript">
+      $('.add-attr').on('click',function(){
+          layer.open({
+              type: 1,
+              title: '新增分类属性',
+              closeBtn: 1,
+              shadeClose: true,
+              content: $("#aa").html()
+          });
+      });
+
+
+
+  </script>
+  <script>
+      $("#one").change(function(){
+
+          var province=$(this).val();
+
+          if(province){
+
+              $.ajax({
+                  type:"post",
+                  url:"{:url('Goods/get_attr')}",
+                  async:false,
+                  data: "id="+province,
+                  datatype:'json',
+                  success:function(data){
+                      // alert(data);
+                      data=eval("("+data+")");
+                      var str='<option value="">请选择二级分类</option>}';
+                      $.each(data, function(index,val) {
+
+                          str+="<option value='"+val.id+"'>"+val.title+"</option>";
+
+                      })
+
+                      $('#two').html(str);
+
+                  }
+
+              });
+
+          }
+
+      })
+  </script>
+  </body>
+  </html>

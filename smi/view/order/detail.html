@@ -1,0 +1,498 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  {include file="public/head" /}
+  <style type="text/css">
+    a.am-text-secondary:visited{color:#3bb4f2;}
+    a.am-text-danger:visited{color:#dd514c;}
+    .am-btn-default {background-color: #fff;}
+    th {text-align:center;}
+    tr td{text-align:center;}
+    select{padding: 4px;border: 1px solid #ccc;}
+    .am-popup-bd {background:#fff;}
+    .am-popup-bd img {max-width: 100%}
+    .am-table>tbody>tr>td.user-info {padding: 1px;text-align: left;}
+    .am-table>tbody>tr>td.user-info img{height: 42px}
+    myred{color:#dd514c;}
+    mygreen {color:#1aad19;}
+    mygery {color:#999;}
+    .wxgreen {color:#1aad19;}
+    .search-div.am-input-group .am-form-field{width:120px;float: right;}
+    .search-div select {float: right;}
+    .ttt-switch {margin: 0 auto;}
+    .am-form select{
+      font-size: 1.2rem;
+      border-color: #e6e6e6;
+      width: unset;
+      padding: .5em 2em .5em 1em;
+      margin: 0 auto;
+    }
+    .am-table>tbody>tr>td.td-img {
+      padding: 1px;
+      text-align: left;
+      padding-left: 10px;
+    }
+    .am-table>tbody>tr>td.td-img img {
+      height: 40px;width: 40px;
+    }
+    .am-table>tbody>tr>td.td-img a {
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 13vw;
+      cursor: pointer;
+    }
+    .am-table>thead>tr>th {
+      border-bottom: 0;
+    }
+    .am-table>tbody>tr:first-child>td {
+      border-top: 0;
+    }
+    .am-table>thead.am-thead-hide>tr>th {
+      border-left: 0;
+      background-color: #f5f5f5;
+    }
+    p {
+      margin: 0;
+    }
+    .am-table>tbody>tr>td {
+      vertical-align: middle;
+      font-size: 1.4rem;
+      line-height: 1.6rem;
+      color: #444;
+      background-color: #fdfdfd;
+    }
+    .format-price>p {
+      display: table;
+      width: 100%;
+      text-align: right;
+    }
+    .format-price>p>span {
+      display: table-cell;
+      width: 50%;
+      text-align: right;
+    }
+    .am-filter>.am-input-group:not(:first-child) {
+      padding-top: 1.25rem;
+    }
+    .am-input-group-label.toumin {
+      background-color: rgba(0,0,0,0);
+      border: 0;
+    }
+    input[type=datetime-local].am-form-field {
+      height: 33px;
+    }
+    .am-btn {
+      font-size: 1.4rem;
+    }
+    .tr {
+      text-align: right;
+    }
+    .tl {
+      float: left !important;
+    }
+  </style>
+</head>
+<body>
+
+{include file="public/header" /}
+
+<div class="am-cf admin-main">
+
+  <!-- sidebar start -->
+  {include file="public/sidebar" nav="index"/}
+  <!-- sidebar end -->
+
+  <!-- content start -->
+<div class="content-page">
+    <div class="content"  style="overflow-y:scroll; overflow-x:scroll; height: 800px">
+  <div class="card-box">
+    <div class="am-cf am-padding">
+      <div class="am-fl am-cf">
+        <strong class="am-text-primary am-text-lg">订单管理</strong> / 
+        <small>订单详情</small>
+      </div>
+    </div>
+
+    <hr style="margin-top:0px;">
+
+
+    <div class="am-g">
+      <div class="am-panel am-panel-default" style="margin:0 1.5rem 1.5rem;">
+        <div class="am-panel-hd">订单信息</div>
+        <div class="am-panel-bd">
+          <div class="am-g">
+            <div class="am-u-md-3 tr">订单号：</div>
+            <div class="am-u-md-9" style="height: 20px">{$order.order_sn}</div>
+            <div class="am-u-md-3 tr">用户：</div>
+            <div class="am-u-md-9" style="height: 20px"><a href="{:url('./Users')}?uid={$order.uid}" target="_blank">{$order.user.nickname}</a></div>
+            <div class="am-u-md-3 tr">订单金额：</div>
+            <div class="am-u-md-9" style="height: 20px">{$order.old_gold} &nbsp;</div>
+            <div class="am-u-md-3 tr">优惠价：</div>
+            <div class="am-u-md-9" style="height: 20px">{$order.gold}</div>
+            <section style="font-size: 1.4rem;">
+            <div class="am-u-md-3 tr">&nbsp;</div>
+            <div class="am-u-md-9" style="height: 20px">&nbsp;</div>
+            </section>
+            <div class="am-u-md-3 tr">订单状态：</div>
+            <div class="am-u-md-9" style="height: 20px">
+              <?php
+                switch ($order['status']) {
+                  case 1: echo '<span class="am-badge am-badge-primary">待付款</span>'; break;
+                  case 2: echo '<span class="am-badge am-badge-primary">待发货</span>'; break;
+                  case 3: echo '<span class="am-badge am-badge-primary">待收货</span>'; break;
+                  case 4: echo '<span class="am-badge am-badge-success">已完成</span>'; break;
+                  case 5: echo '<span class="am-badge am-badge-warning">已关闭</span>'; break;
+                  case 6: echo '<span class="am-badge am-badge-primary">申请退款/货</span>'; break;
+                  case 7: echo '<span class="am-badge am-badge-danger">退款/货失败</span>'; break;
+                  case 8: echo '<span class="am-badge am-badge-primary">退款/货受理中</span>'; break;
+                  case 9: echo '<span class="am-badge am-badge-success">已退款/货</span>'; break;
+                  default: break;
+                }
+              ?>
+            </div>
+            <div class="am-u-md-3 tr">下单时间：</div>
+            <div class="am-u-md-9" style="height: 20px">{:date("Y-m-d H:i:s",$order['create_time'])}</div>
+            <if condition="$order['status'] egt 2">
+            <div class="am-u-md-3 tr">支付时间：</div>
+            <div class="am-u-md-9" style="height: 20px">{:date("Y-m-d H:i:s",$order['pay_time'])}</div>
+            </if>
+            <if condition="$order['status'] egt 3">
+            <div class="am-u-md-3 tr">发货时间：</div>
+            <div class="am-u-md-9" style="height: 20px">{:date("Y-m-d H:i:s",$order['fachu_time'])}</div>
+            </if>
+            
+          </div>
+        </div>
+      </div>
+      <div class="am-panel am-panel-default" style="margin:0 1.5rem 1.5rem;">
+        <div class="am-panel-bd" style="padding: 0;">
+        <div class="am-scrollable-horizontal">
+          <table class="am-table am-text-nowrap" style="margin: 0;">
+            <thead class="am-thead-hide">
+              <tr>
+                <th width="5%">ID</th>
+                <th width="10%">订单</th>
+                <th width="10%">属性备注</th>
+                <th width="10%">售价</th>
+                <th width="10%">总价</th>
+              </tr>
+            </thead>
+            <tbody>
+                {volist name="order.goods" id="vp"}
+                <tr>
+                  <td>{$vp.goods_id}</td>
+                  <td class="td-img" style="text-align: center;">
+                    <img src="__ROOT__/uploads/{$vp.img}">
+                    <a href="{:url('Goods/goods')}?id={$vp.goods_id}" target="_blank">{$vp.title}</a>
+                  </td>
+                  <td>{$vp.attrtext}</td>
+                  <td>￥{$vp['gold']}</td>
+                  <td>￥{$vp['sum_gold']}</td>
+                </tr>
+                {/volist}
+            </tbody>
+          </table>
+
+        </div>
+        </div>
+      </div>
+      
+      <div class="am-panel am-panel-default" style="margin:0 1.5rem 1.5rem;">
+        <div class="am-panel-hd">配送信息</div>
+        <div class="am-panel-bd">
+          <div class="am-g">
+           <div class="am-u-md-3 tr">收货人：</div>
+            <div class="am-u-md-9" style="height: 20px">{$order.address_name}</div>
+            <div class="am-u-md-3 tr">联系方式：</div>
+            <div class="am-u-md-9" style="height: 20px">{$order.address_phone}</div>
+            
+            <div class="am-u-md-3 tr">配送方式：</div>
+            <div class="am-u-md-9" style="height: 20px">快递</div>
+            <div class="am-u-md-3 tr">快递地址：</div>
+            <div class="am-u-md-9" style="height: 20px">{$order.address_area} {$order.address_info}</div>
+            
+            <?php if($order['status']==3){?>
+            <section style="font-size: 1.4rem;">
+              <div class="am-u-md-3 tr">快递公司：</div>
+              <div class="am-u-md-9" style="height: 20px"><?php echo $order['fachu_name'] ?></div>
+              <div class="am-u-md-3 tr">快递单号：</div>
+              <div class="am-u-md-9" style="height: 20px">
+                <a href="javascript:;" onclick="kuaidi('{$order.fachu_sn}')" style="font-size: 1.6rem"><?php echo $order['fachu_sn'] ?></a>
+              </div>
+            </section>
+            <?php } ?>
+            
+          </div>
+        </div>
+      </div>
+      <div class="am-panel am-panel-default" style="margin:0 1.5rem 1.5rem;">
+        <div class="am-panel-hd">订单操作</div>
+        <div class="am-panel-bd">
+          <div class="am-form">
+          <!-- 未付款 -->
+            {if condition="$order['status'] eq 1"}
+            <!-- 未发货 -->
+            {elseif condition="$order['status'] eq 2" }
+              
+              <div class="am-g am-margin-top">
+                <div class="am-u-md-2 tr">快递公司</div>
+                <div class="am-u-md-4 tl">
+                  <input type="text" name="kuaidi_name" class="am-input-sm">
+                </div>
+              </div>
+              <div class="am-g am-margin-top">
+                <div class="am-u-md-2 tr">快递单号</div>
+                <div class="am-u-md-4 tl">
+                  <input type="text" name="kuaidi_sn" class="am-input-sm">
+                </div>
+              </div>
+              <div class="am-g am-margin-top">
+                <div class="am-u-md-2 tr">&nbsp;</div>
+                <div class="am-u-md-4 tl">
+                  <button class="am-btn am-btn-default fachu">确认发货</button>
+                </div>
+              </div>
+              <script type="text/javascript">
+                var flag_fachu = false;
+                $('.fachu').on('click',function(){
+                  if(flag_fachu) return false;
+                  var data = new Object();
+                  data['op'] = "fachu";
+                  data['order_sn'] = "{$order.order_sn}";
+
+                  data['kuaidi_name'] = $('input[name=kuaidi_name]').val();
+                  data['kuaidi_sn'] = $('input[name=kuaidi_sn]').val();
+
+                  if(!data['kuaidi_name']){
+                    layer.msg('请填写快递公司');return false;
+                  }else if(!data['kuaidi_sn']){
+                    layer.msg('请填写快递单号');return false;
+                  }
+                  flag_fachu = true;
+                  $.post('{:url("order_op")}',data,function(res){
+                    layert('发货成功',function(){
+                      location.reload();
+                    });
+                  });
+                });
+              </script>
+            {elseif condition="$order['status'] eq 3 or $order['status'] eq 4" }
+              <div class="am-g am-margin-top">
+                <div class="am-u-md-2 tr">&nbsp;</div>
+                <div class="am-u-md-4 tl">
+                  <button class="am-btn am-btn-default" onclick="kuaidi('{$order.fachu_sn}')">查看物流</button>
+                </div>
+              </div>
+              <!-- 申请退款 -->
+              {elseif condition="$order['status'] eq 6" }
+              
+              <div class="am-g am-margin-top">
+                <div class="am-u-md-2 tr">申请理由</div>
+                <div class="am-u-md-4 tl">
+                  <textarea name="apply_reson" class="am-input-sm" style="height: 150px;">{$order.apply_reson}</textarea>
+                </div>
+              </div>
+              <div class="am-g am-margin-top">
+                <div class="am-u-md-2 tr">申请时间</div>
+                <div class="am-u-md-4 tl">
+                  <input type="text" name="apply_time" class="am-input-sm" value="<?php echo date('Y-m-d H:i',$order['apply_time'])  ?>" disabled="disabled">
+                </div>
+              </div>
+              <div class="am-g am-margin-top">
+                <div class="am-u-md-2 tr">申请金额</div>
+                <div class="am-u-md-4 tl">
+                  <input type="text" name="apply_gold" class="am-input-sm" value="<?php echo $order['apply_gold']  ?>" disabled="disabled">
+                </div>
+              </div>
+
+              <div class="am-g am-margin-top">
+                <div class="am-u-md-2 tr">图片凭证</div>
+                  <ul data-am-widget="gallery" class="am-gallery am-avg-sm-2
+                  am-avg-md-3 am-avg-lg-4 am-gallery-default" data-am-gallery="{ pureview: true }" >
+                      <?php foreach($order['apply_imgs'] as $i=>$val){?>
+                           <li>
+                            <div class="am-gallery-item">
+                                  <img src="__ROOT__/uploads/<?php echo $val ?>"  alt=""/>
+                            </div>
+                          </li>
+                      <?php } ?>
+                     
+
+                  </ul>
+
+              </div>
+
+              <div class="am-g am-margin-top">
+                <div class="am-u-md-2 tr">&nbsp;</div>
+                <div class="am-u-md-4 tl">
+                  <button class="am-btn am-btn-default true">受理</button>
+                  <button class="am-btn am-btn-default false">驳回</button>
+                </div>
+              </div>
+              <script type="text/javascript">
+                $('.true').on('click',function(){
+                  var data = new Object();
+                  data['op'] = "refund";
+                  data['order_sn'] = "{$order.order_sn}";
+                  data['status'] = 8;
+
+
+
+                  $.post('{:url("order_op")}',data,function(res){
+                    layert('审核成功',function(){
+                      location.reload();
+                    });
+                  });
+                });
+                $('.false').on('click',function(){
+                  var data = new Object();
+                  data['op'] = "refund";
+                  data['order_sn'] = "{$order.order_sn}";
+                  data['status'] = 7;
+
+                  $.post('{:url("order_op")}',data,function(res){
+                    layert('驳回成功',function(){
+                      location.reload();
+                    });
+                  });
+                });
+              </script>
+            <!-- 申请退款 -->
+              {elseif condition="$order['status'] eq 8" }
+              <!-- 退款 -->
+              <?php if($order['apply_type']==1){?>
+                <div class="am-g am-margin-top">
+                  <div class="am-u-md-2 tr">&nbsp;</div>
+                  <div class="am-u-md-4 tl">
+                    <button class="am-btn am-btn-default apply_true">确认退款</button>
+                    <button class="am-btn am-btn-default apply_false">驳回</button>
+                  </div>
+                </div>
+              <?php } ?>
+              <!-- 退货 -->
+              <?php if($order['apply_type']==2){?>
+                <div class="am-g am-margin-top">
+                  <div class="am-u-md-2 tr">快递公司名称</div>
+                  <div class="am-u-md-4 tl">
+                    <input type="text" name="" value="<?php echo $order['apply']['express_name']; ?>"  disabled="disabled">
+                  </div>
+                </div>
+                <div class="am-g am-margin-top">
+                  <div class="am-u-md-2 tr">快递单号</div>
+                  <div class="am-u-md-4 tl">
+                    <input type="text" name="" class="am-input-sm" value="<?php echo $order['apply']['express_sn']; ?>" disabled="disabled" >
+                  </div>
+                </div>
+                <div class="am-g am-margin-top">
+                  <div class="am-u-md-2 tr">联系电话</div>
+                  <div class="am-u-md-4 tl">
+                    <input type="text" name="" class="am-input-sm" value="<?php echo $order['apply']['phone']; ?>" disabled="disabled" >
+                  </div>
+                </div>
+                <div class="am-g am-margin-top">
+                  <div class="am-u-md-2 tr">&nbsp;</div>
+                  <div class="am-u-md-4 tl">
+                    <button class="am-btn am-btn-default apply_true">确认收货并退款</button>
+                    <button class="am-btn am-btn-default apply_false">驳回</button>
+                  </div>
+                </div>
+              <?php } ?>
+
+            <script type="text/javascript">
+                $('.apply_true').on('click',function(){
+                    var data = new Object();
+                    data['op'] = "express";
+                    data['order_sn'] = "{$order.order_sn}";
+
+
+                    $.post('{:url("order_op")}',data,function(res){
+                        if(res.code==1){
+                            layert('退款成功',function(){
+                                location.reload();
+                            });
+                        }
+                        if(res.code==0){
+                            layert('退款失败',function(){
+                                location.reload();
+                            });
+                        }
+                    });
+                });
+                $('.apply_false').on('click',function(){
+                    var data = new Object();
+                    data['op'] = "express";
+                    data['order_sn'] = "{$order.order_sn}";
+                    data['status'] = 7;
+
+                    $.post('{:url("order_op")}',data,function(res){
+                        layert('驳回成功',function(){
+                            location.reload();
+                        });
+                    });
+                });
+            </script>
+
+            {elseif condition="$order['status'] eq 4" }
+              <div class="am-g am-margin-top">
+                <div class="am-u-md-2 tr">&nbsp;</div>
+                <div class="am-u-md-4 tl">
+                  <button class="am-btn am-btn-default" disabled>已完成</button>
+                </div>
+              </div>
+            {elseif condition="$order['status'] eq 5" }
+              <div class="am-g am-margin-top">
+                <div class="am-u-md-2 tr">订单已关闭</div>
+                <div class="am-u-md-4 tl">
+                  <button class="am-btn am-btn-default recovery" >恢复订单</button>
+                </div>
+              </div>
+              <script type="text/javascript">
+                $('.recovery').on('click',function(){
+                  var data = new Object();
+                  data['op'] = "recovery";
+                  data['order_sn'] = "{$order.order_sn}";
+
+                  $.post('{:url("order_op")}',data,function(res){
+                    layert('订单恢复成功',function(){
+                      location.reload();
+                    });
+                  });
+                });
+                
+              </script>
+            {/if}
+            <div class="am-g am-margin-top"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  </div>
+  <footer class="admin-content-footer"><hr></footer>
+</div>
+  <!-- content end -->
+</div>
+
+  {include file="public/footer" /}
+<script type="text/javascript">
+function layert(content,func){ layer.open({title:false,content:content,shade:0.2,shadeClose:true,closeBtn:0,yes:func,end:func}); }
+var flag_kuaidi = false;
+function kuaidi(express_nu){
+    if(flag_kuaidi){return false;}
+    if(express_nu){
+        flag_kuaidi = true;
+        layer.open({
+            type:2, closeBtn:1, anim:0,shadeClose:true,
+            title:["快递单号："+express_nu, 'background-color:#fff;color:#000'],
+            area:['500px','85vh'],
+            content:"https://m.kuaidi100.com/result.jsp?nu="+express_nu
+        });
+        flag_kuaidi = false;
+    }
+}
+</script>
+  </body>
+  </html>

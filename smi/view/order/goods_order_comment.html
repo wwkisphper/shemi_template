@@ -1,0 +1,128 @@
+<include file="Common/base" />
+<div class="am-cf admin-main">
+<include file="Common/sidebar" nav="order" navv="order_comment"/>
+<style type="text/css">
+  a.am-text-secondary:visited{color:#3bb4f2;}
+  a.am-text-danger:visited{color:#dd514c;}
+  .am-btn-default {background-color: #fff;}
+  th {text-align:center;}
+  tr td{text-align:center;}
+  select{padding: 4px;border: 1px solid #ccc;}
+  .am-popup-bd {background:#fff;}
+  .am-popup-bd img {max-width: 100%}
+  .am-u-sm-2 {border-top: 1px solid #ddd;margin-top: 10px;}
+  .am-u-sm-10 {border-left: 1px solid #ddd;margin-top: 10px;}
+  .am-table>tbody>tr>td.user-info {padding: 1px;text-align: left;}
+  .am-table>tbody>tr>td.user-info img{height: 42px}
+  myred{color:#dd514c;}
+  mygreen {color:#1aad19;}
+  mygery {color:#999;}
+  .wxgreen {color:#1aad19;}
+  .search-div.am-input-group .am-form-field{width:120px;float: right;}
+  .search-div select {float: right;}
+  .ttt-switch {margin: 0 auto;}
+  .am-form select{
+    font-size: 1.2rem;
+    border-color: #e6e6e6;
+    width: unset;
+    padding: .5em 2em .5em 1em;
+    margin: 0 auto;
+  }
+  .am-table>tbody>tr>td.td-img {
+    padding: 1px;
+  }
+  .am-table>tbody>tr>td.td-img img {
+    width: 42px;
+    height: 42px;
+    padding: 2px;
+    cursor: pointer;
+  }
+  .comment-content{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 300px;
+    display: inline-block;
+  }
+</style>
+<div class="admin-content">
+  <div class="admin-content-body">
+    <div class="am-cf am-padding">
+      <div class="am-fl am-cf">
+        <strong class="am-text-primary am-text-lg">订单管理</strong> / 
+        <small>评价管理</small>
+      </div>
+    </div>
+    <hr style="margin-top:0px;">
+
+    <!-- <div class="am-g">
+      <div class="am-u-sm-12 am-u-md-6">
+        <div class="am-btn-toolbar">
+          <div class="am-btn-group am-btn-group-xs">
+            <a class="am-btn am-btn-default" href="{:U('tg_explain')}">修改介绍内容</a>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <div class="am-g">
+      <div class="am-u-sm-12">
+        <form class="am-form am-scrollable-horizontal">
+          <table class="am-table table-main am-text-nowrap">
+            <thead>
+              <tr>
+                <th width="5%">UID</th>
+                <th width="5%">订单</th>
+                <th width="10%">评论内容</th>
+                <th width="10%">评论图片</th>
+                <th width="5%">评论时间</th>
+                <th width="5%">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <if condition="!$list">
+                <tr><td colspan="8" style="text-align:center;">这里啥都没有</td></tr>
+              </if>
+              <volist name="list" id="vo">
+                <tr>
+                  <td>
+                    <a href="{:U('./Users')}?uid={$vo.uid}" target="_blank">{$vo.uid}</a>
+                  </td>
+                  <td>
+                    <a href="{:U('order_list')}?order_sn={$vo.order_sn}" target="_blank">{$vo.order_sn}</a>
+                  </td>
+                  <td style="cursor: pointer;">
+                    <span onclick="layert('{:tobr($vo['comment'])}')" class="comment-content">{$vo.comment}</span>
+                  </td>
+                  <td class="td-img">
+                    <volist name="vo['comment_img']" id="vp">
+                    <img src="__ROOT__/{$vp}" onclick="window.open('__ROOT__/{$vp}')">
+                    </volist>
+                  </td>
+                  <td>{:cdate(0,$vo['comment_time'])}</td>
+                  <td style="padding:.45rem;">
+                    <?php if($auth){ ?>
+                    <a href="{:U('comment_dele')}?order_sn={$vo.order_sn}" class="am-btn am-btn-danger am-btn-xs" onclick="return confirm('确定删除此评论吗')">删除</a>
+                    <?php } ?>
+                  </td>
+                </tr>
+              </volist>
+            </tbody>
+          </table>
+        </form>
+        <div class="am-cf">
+          <div class="am-fr">
+            {$page}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="admin-content-footer"><hr></footer>
+</div>
+<script type="text/javascript">
+  function layert(cont,func){
+    layer.open({title:'',content:cont,shade:0.2,closeBtn:0,yes:func});
+  }
+</script>
+<include file="Common/foot" />

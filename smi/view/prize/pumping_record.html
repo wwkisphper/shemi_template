@@ -21,12 +21,20 @@
             
                 <div class="am-g">
                     <div class="am-u-sm-2">
-                        <strong class="am-text-primary am-text-lg">积分商城管理</strong> / <small>大转盘管理</small>
+                        <strong class="am-text-primary am-text-lg">大转盘管理</strong> / <small>中奖记录</small>
                     </div>
                     <div class="am-u-sm-9">
+                        <form action="{:url('Prize/AdminPumpingRecord')}" class="am-form">
+                            <div class="am-input-group">
+                              <span class="am-input-group-btn">
+                                <button class="am-btn am-btn-default" type="submit"><span class="am-icon-search"></span> </button>
+                              </span>
+                              <input type="text" name="keyword" value="{$keyword}" class="am-form-field" placeholder="请输入用户微信昵称">
+                            </div>
+                        </form>
                     </div>
                     <div class="am-u-sm-1">
-                        <a  href="{:url('Prize/AddPrize')}" class="am-btn am-btn-secondary am-round">新添奖品</a>
+                       
                     </div>
                 </div>      
 </div>
@@ -44,8 +52,9 @@
                     <tr>
                         <th>奖品名称</th>
                         <th>奖品图片</th>
-                        <th>奖品库存</th>
-                        <th>中奖概率</th>
+                        <th>中奖时间</th>
+                        <th>用户微信昵称</th>
+                        <th>状态</th>
                         <th>操作</th>
                         
                     </tr>
@@ -56,25 +65,25 @@
                             
                             <td>{$vo.name}</td>
                             <td><img src="__ROOT__/uploads/prize/{$vo.picture}" alt="" style="height:100px;"></td>
-                            <td>{$vo.stock}</td>
-                            <td>{$vo.probability}%</td>
+                            <td>{$vo.create_time}</td>
+                            <td>{$vo.nickname}</td>
                             <td>
-                                <div class="am-btn-group">
-                                  <button class="am-btn am-btn-secondary">设置</button>
-                                  <div class="am-dropdown" data-am-dropdown>
-                                    <button class="am-btn am-btn-secondary am-dropdown-toggle" data-am-dropdown-toggle> <span class="am-icon-caret-down"></span></button>
-                                    <ul class="am-dropdown-content">
-                                      <li><a href="{:url('Prize/AlterPrize')}?id={$vo.id}">修改</a></li>
-                                      <li><a href="javascript:;" onclick="InquiresDel({$vo.id});">删除</a></li>
-                                    </ul>
-                                  </div>
-                                </div>
+                                {if condition="$vo.status == 1"}
+                                    已兑奖
+                                {else /}
+                                    未兑奖
+                                {/if}
+                            </td>
+                            <td>
+                                {if condition="$vo.status == 0"}
+                                    <button type="button" onclick="InquiresAlter({$vo.id})" class="am-btn am-btn-secondary am-round">已兑奖</button>
+                                {/if}
                             </td>
                         </tr>
                     {/volist}
                 </tbody>  
             </table>
-            
+            <center>{$page}</center>
         <br>
             <br>
             <br>
@@ -96,9 +105,9 @@
 {include file="public/footer" /}
 </body>
 <script>
-    function InquiresDel(id){
-        if(confirm("请再次确认是否删除此奖品")){
-            location.href="{:url('Prize/DelPrize')}?id="+id;
+    function InquiresAlter(id){
+        if(confirm("请再次确认是否改为已兑奖")){
+            location.href="{:url('Prize/RecordStatusAlter')}?id="+id;
         }
     }
 </script>

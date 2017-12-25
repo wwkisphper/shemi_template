@@ -72,8 +72,8 @@ class User extends Controller
             header('Content-Type:application/json; charset=utf-8');
             return json_encode($info);
         }
-
         $id = db('User') -> where("openid = '{$data['openid']}' AND admin_id={$data['admin_id']}") -> value('id');
+
         if($id){
             db('User') -> where("id",$id) -> update($data);
             $info['status'] = 1;
@@ -81,6 +81,17 @@ class User extends Controller
             header('Content-Type:application/json; charset=utf-8');
             return json_encode($info);
         }else{
+            $shareConfig= db('share_config')->where('admin_id='.$data['admin_id'])-> field('switch') -> find();
+            if($shareUid != 'undefined' && $shareUid != 'null' && $shareUid !== '' && $shareConfig['switch']==1){
+                $share_user= db('user')->where('id='.$shareUid)->value('share_status');
+                if($share_user==1){
+                    $data['share_uid']=$shareUid;
+
+                }else{
+                    $data['share_uid']="";
+
+                }
+            }
             $data['create_time'] = time();
             $id = db('User') -> insertGetId($data);
             if($id){
@@ -90,6 +101,7 @@ class User extends Controller
                     $share['source_uid'] = $id;
                     $share['integral'] = $adminData['share_integral'];
                     db('Promotion_integral') -> insert($share);
+
                 }
                 $info['status'] = 1;
                 $info['id'] = $id;
@@ -255,5 +267,21 @@ class User extends Controller
         header('Content-Type:application/json; charset=utf-8');
         return json_encode($info);
     }
-    
+
+    //分销身份申请
+    public function share_apply(){
+        $user_id=$_REQUEST['user_id'];
+        $add['status']=0;
+        $add['addtime']=time();
+        $add['name']=$_REQUEST['name'];
+        $add['phone']=$_REQUEST['phone'];
+
+        $vers=db('share_apply')->where('user_id='.$user_id.' and status=0')->find();
+        if($vers){
+            echo json_encode(array('code' => '201', 'info' => '已提交申请!等待审核'));exit;
+        }
+        $add['user_id']=$user_id;
+        db('share_apply')->insert($add);
+        return json_encode(array('code' => '200', 'info' => '提交成功!等待审核'));exit;
+    }
 }

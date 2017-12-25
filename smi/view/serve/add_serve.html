@@ -62,7 +62,7 @@
       <label for="doc-ipt-file-2">服务图片</label>
       <div>
         <button type="button" class="am-btn am-btn-default am-btn-sm">
-          <i class="am-icon-cloud-upload"></i> 选择要上传的文件(每次可多选，如拉框选或按住左Ctrl多选，但每次点击此处皆清空之前的选择，宽高比例：1)</button>
+          <i class="am-icon-cloud-upload"></i> <span>选择要上传的文件(每次可多选，如拉框选或按住左Ctrl多选，但每次点击此处皆清空之前的选择，宽高比例：1)</span></button>
       </div>
       <input type="file" id="doc-ipt-file-2" required multiple name="picture[]">
     </div>
@@ -71,7 +71,7 @@
       <label for="doc-ipt-file-2">商品详情介绍长图</label>
       <div>
         <button type="button" class="am-btn am-btn-default am-btn-sm">
-          <i class="am-icon-cloud-upload"></i> 选择要上传的文件</button>
+          <i class="am-icon-cloud-upload"></i> <span>选择要上传的文件</span></button>
       </div>
       <input type="file" id="doc-ipt-file-3" required name="picture_description[]">
     </div>
@@ -155,6 +155,15 @@
     }else{
       $(this).parent().parent().find("input[type='checkbox']").prop('checked',false);
     }
+  });
+  $('input[type=file]').on('change',function(){
+  	var fileNames = "";
+    $.each(this.files,function(){
+        fileNames = fileNames + ' ' + this.name;
+        
+    });
+    fileNames = fileNames?fileNames:'无文件';
+    $(this).parent().find('span').html(fileNames);
   });
 </script>
 </html>

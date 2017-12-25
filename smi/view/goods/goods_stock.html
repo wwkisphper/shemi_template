@@ -1,0 +1,208 @@
+  <!doctype html>
+  <html class="no-js">
+  <head>
+    {include file="public/head" /}
+    <style type="text/css">
+      a.am-text-secondary:visited{color:#3bb4f2;}
+      a.am-text-danger:visited{color:#dd514c;}
+      .am-btn-default {background-color: #fff;}
+      th {text-align:center;}
+      tr td{text-align:center;}
+      select{padding: 4px;border: 1px solid #ccc;}
+      .am-popup-bd {background:#fff;}
+      .am-popup-bd img {max-width: 100%}
+      .am-u-sm-2 {border-top: 1px solid #ddd;margin-top: 10px;}
+      .am-u-sm-10 {border-left: 1px solid #ddd;margin-top: 10px;}
+      .am-table>tbody>tr>td.user-info {padding: 1px;text-align: left;}
+      .am-table>tbody>tr>td.user-info img{height: 42px}
+      myred{color:red;}
+      mygreen {color:#1aad19;}
+      mygery {color:#999;}
+      .wxgreen {color:#1aad19;}
+      #add_swiper_form {display: none}
+      .am-form input[type=text][readonly]{
+        border:0;
+        padding: 0;
+        height: 25px;
+        cursor: text;
+        background-color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+
+  {include file="public/header" /}
+
+  <div class="am-cf admin-main">
+
+    <!-- sidebar start -->
+    {include file="public/sidebar" nav="cash_goods_shop"/}
+    <!-- sidebar end -->
+
+    <!-- content start -->
+    <div class="admin-content">
+      <div class="admin-content-body">
+        <div class="am-cf am-padding">
+          <div class="am-fl am-cf">
+            <strong class="am-text-primary am-text-lg">商品管理</strong> /
+            <small>库存管理</small>
+          </div>
+        </div>
+        <hr style="margin-top:0px;">
+        <div class="am-g">
+          <div class="am-u-sm-12">
+            <div class="am-panel am-panel-default">
+              <div class="am-panel-hd" style="line-height:14px;">
+                <h4 class="am-panel-title am-collapsed" data-am-collapse="{target: '#attention_content'}">注意事项</h4>
+              </div>
+              <div id="attention_content" class="am-panel-collapse am-collapse">
+                <div class="am-panel-bd" style="font-size:14px;padding:5px 10px;">组合库存不得大于总库存。<br></div>
+              </div>
+            </div>
+            <script type="text/javascript">
+                $(function(){
+                    if(!sessionStorage.getItem('first_open_homepage_swiper')){
+                        $("#attention_content").collapse('open');
+                        setTimeout(function(){
+                            $("#attention_content").collapse('close');
+                            sessionStorage.setItem('first_open_homepage_swiper',true);
+                        },800);
+                    }
+                });
+            </script>
+          </div>
+        </div>
+        <div style="width: 90%;margin-left: 20px;border: 1px solid #ccc;border-bottom: 2px solid #ccc;line-height: 80px;margin-bottom: 10px;clear: both;height: 80px;padding: 5px">
+          <div style="float: left;margin-left: 10px;margin-right: 20px;">
+            <img src="__UPLOAD__/<?php echo $data['img'] ?>" alt="" style="width: 70px;height: 60px">
+          </div>
+          <div style="float: left;width: 300px;">
+            商品名称:&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $data['title'] ?>
+          </div>
+          <div style="float: left;width: 200px;">
+            商品型号: &nbsp;&nbsp;&nbsp;&nbsp;<?php echo $data['model'] ?>
+          </div>
+          <div style="float: left;width: 200px;">
+            商品总库存: &nbsp;&nbsp;&nbsp;&nbsp;<?php echo $data['total'] ?>
+          </div>
+        </div>
+        <?php if($old_stock){?>
+        <div class="am-panel-bd" style="font-size:14px;padding:5px 10px;margin-left: 10px;">历史库存:<br></div>
+        <?php } ?>
+        <div class="am-g">
+          <div class="am-u-sm-6" style="width:90%">
+
+            <?php if($old_stock){?>
+            <table class="am-table am-table-bordered">
+              <thead>
+              <tr>
+                <?php foreach($cateattr as $i=>$val){?>
+                <th width="10%"><?php echo $val['title']; ?></th>
+                <?php } ?>
+
+                <th width="10%">库存</th>
+              </tr>
+              </thead>
+              <tbody>
+              <!-- <if condition="!$swiper">
+                <tr><td colspan="6" style="text-align:center;">这里啥都没有</td></tr>
+              </if> -->
+              <?php foreach($old_stock as $i=>$val){?>
+              <tr>
+                <?php foreach($val['attr_name'] as $o=>$vol){?>
+                <td style="padding:.45rem;">
+                  <?php echo $vol['attr_title']; ?>
+                </td>
+                <?php } ?>
+                <td style="padding:.45rem;">
+                  <?php echo $val['stock'] ?>
+                </td>
+              </tr>
+              <?php } ?>
+              </tbody>
+            </table>
+            <?php } ?>
+
+
+          </div>
+
+          <div class="am-u-sm-1"></div>
+        </div>
+
+        <div class="am-panel-bd" style="font-size:14px;padding:5px 10px;margin-left: 10px;">请设置下列最新组合库存:<br></div>
+        <form action="<?php echo url('Goods/post_stock'); ?>" method="post" accept-charset="utf-8">
+          <input type="hidden" style="text-align: center;" name="goods_id" value="<?php echo $id; ?>">
+          <input type="hidden" name="sum_stock" id="sum_stock" value="<?php echo $data['total'] ?>">
+          <div class="am-g">
+            <div class="am-u-sm-6" style="width:90%">
+
+
+              <table class="am-table am-table-bordered">
+                <thead>
+                <tr>
+                  {foreach($arr2 as $i=>$val)}
+                  <th width="10%">{$val.title}</th>
+                  {/foreach}
+
+                  <th width="10%">库存</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <!-- <if condition="!$swiper">
+                  <tr><td colspan="6" style="text-align:center;">这里啥都没有</td></tr>
+                </if> -->
+                {foreach($arr as $i=>$val)}
+                <tr>
+                  <?php if(!empty($val['attr_id'])){   ?>
+                  <input type="hidden" style="text-align: center;" name="data[<?php echo $i ?>][attr]" value="<?php echo $val['attr_id'] ?>">
+                  <?php } ?>
+                  <?php if(!empty($val['attr_name'] )){   ?>
+                  {foreach($val['attr_name'] as $o=>$vol)}
+                  <td style="padding:.45rem;">
+                    <?php echo $vol[0]['attr_title']; ?>
+                  </td>
+                  </td>
+                  {/foreach}
+                  <?php } ?>
+                  <td style="padding:.45rem;">
+                    <input class="cc" type="text" style="text-align: center;width: 90%" name="data[<?php echo $i ?>][stock]" value="">
+                  </td>
+                </tr>
+                {/foreach}
+
+                </tbody>
+              </table>
+
+
+              <!-- <input type="button" class="am-btn am-btn-primary" value="保存排序"> -->
+
+            </div>
+
+          </div>
+          <button type="submit" style="margin-left: 500px;margin-bottom: 50px">提交库存</button>
+        </form>
+      </div>
+      <footer class="admin-content-footer">
+        <hr>
+      </footer>
+    </div>
+    <!-- content end -->
+  </div>
+
+  {include file="public/footer" /}
+  <script>
+      $('.cc').change(function() {
+          var sum_stock=$('#sum_stock').val();
+          var stock=0;
+          $(".cc").each(function(){
+              a=$(this).val();
+              stock=stock+Number(a);
+          });
+          if(stock>sum_stock){
+              alert('提示:组合库存总和不得大于总库存'+sum_stock+'!');
+          }
+      })
+  </script>
+  </body>
+  </html>

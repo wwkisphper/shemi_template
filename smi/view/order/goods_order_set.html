@@ -1,0 +1,75 @@
+<include file="Common/base" />
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/ueditor.all.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/lang/zh-cn/zh-cn.js"></script>
+<div class="am-cf admin-main">
+<include file="Common/sidebar" nav="order" navv="order_set"/>
+<style type="text/css">
+  .w1 {width: 100px!important}
+  .w2 {width: 200px!important}
+  .w3 {width: 300px!important}
+  .set-div:not(:last-child) {margin-bottom: 10px;}
+  #editor {margin-bottom: 10px;}
+  .am-input-group .am-form-field {min-width: 80px;}
+</style>
+<div class="admin-content">
+  <div class="admin-content-body">
+    <div class="am-cf am-padding">
+      <div class="am-fl am-cf">
+        <strong class="am-text-primary am-text-lg">订单管理</strong> / 
+        <small>下单设置</small>
+      </div>
+    </div>
+    <hr style="margin-top:0px;">
+
+    <div class="am-g" style="padding: 0 1.6rem;">
+      <div class="am-panel am-panel-default">
+        <div class="am-panel-hd">
+          <ul class="am-nav am-nav-pills">
+            <li class="{:I('type')==1?'am-active':''}">
+              <a href="{:U('')}?type=1">订单确认</a>
+            </li>
+            <li class="{:I('type')==2?'am-active':''}">
+              <a href="{:U('')}?type=2">订单续租</a>
+            </li>
+            <li class="{:I('type')==3?'am-active':''}">
+              <a href="{:U('')}?type=3">订单返还</a>
+            </li>
+          </ul>
+        </div>
+        <div class="am-panel-bd">
+          <form action="" method="POST">
+            <input type="hidden" name="op" value="save">
+            <input type="hidden" name="type" value="{$_GET['type']}">
+            <?php if($_GET['type'] == 1): ?>
+            <script id="editor" name="order_submit_explain" type="text/plain" style="width:500px;height:350px">{:htmlspecialchars_decode($set['order_submit_explain'])}</script>
+            <div class="am-g set-div">
+              <div class="am-u-lg-4">
+                <div class="am-input-group">
+                  <span class="am-input-group-label">快递邮费</span>
+                  <input type="text" name="order_postage" value="{$set.order_postage}" class="am-form-field">
+                  <span class="am-input-group-label">元（整数）</span>
+                </div>
+              </div>
+            </div>
+            <?php elseif($_GET['type'] == 2): ?>
+            <script id="editor" name="order_relet_explain" type="text/plain" style="width:500px;height:350px">{:htmlspecialchars_decode($set['order_relet_explain'])}</script>
+            <?php elseif($_GET['type'] == 3): ?>
+            <script id="editor" name="order_fanhuan_explain" type="text/plain" style="width:500px;height:350px">{:htmlspecialchars_decode($set['order_fanhuan_explain'])}</script>
+            <?php endif; ?>
+            <div class="am-g set-div">
+              <div class="am-u-lg-7">
+                <button class="am-btn am-btn-primary">保存</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="admin-content-footer"><hr></footer>
+</div>
+<script type="text/javascript">
+  var ue = UE.getEditor('editor');
+</script>
+<include file="Common/foot" />

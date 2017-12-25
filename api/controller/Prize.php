@@ -88,12 +88,13 @@ class Prize extends Controller
                 return json_encode($info);
             }
 
-            $success = model('Prize') -> PumpingRecord($uid,$adminId,$pumpingId);   //记录中奖
-            if($success){
+            $result = model('Prize') -> PumpingRecord($uid,$adminId,$pumpingId);   //记录中奖
+            if($result['success']){
                 Db::commit();
                 $info['status'] = 1;
                 $info['msg'] = '中奖了';
                 $info['prize_id'] = $pumpingId;
+                $info['prize_name'] = $result['prize_name'];
                 header('Content-Type:application/json; charset=utf-8');
                 return json_encode($info);
             }else{

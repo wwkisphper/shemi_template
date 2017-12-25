@@ -15,4 +15,12 @@ class Base extends Controller
         }
         $this -> assign("admin", session("admin"));
     }
+
+    public  $auth;
+    protected function _initialize()
+    {
+        parent::_initialize();
+
+
+    }
 }

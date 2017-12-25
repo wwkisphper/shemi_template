@@ -67,7 +67,9 @@ class Article extends Base
 
 			$success = db('Article') -> update($data);
 			if($success){
-				unlink('./uploads/article/'.$picture);
+				if($_FILES['picture']['name'][0]){
+					unlink('./uploads/article/'.$picture);
+				}
 				$this -> success('修改成功','Article/ArticleList');
 			}else{
 				$this -> error('修改失败');

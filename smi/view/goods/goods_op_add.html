@@ -1,0 +1,541 @@
+<!doctype html>
+  <html class="no-js">
+  <head>
+    {include file="public/head" /}
+    <script type="text/javascript" src="__ROOT__/static/UEditor/ueditor.config.js"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="__ROOT__/static/UEditor/ueditor.all.js"></script>
+    <script type="text/javascript" charset="utf-8" src="__ASSETS__/js/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <style type="text/css">
+      .am-form{width:500px;margin-left:20px;float: left;}
+      #editor {font-size: 12px;}
+      .am-form label span{font-size: 13px;font-weight:normal;}
+      .am-form label p{display: inline;color: #f00;}
+      .am-form .am-form-inline-2 input[type=file]{width: 246px}
+      .am-form .am-form-inline-3 input[type=text]{width: 160px}
+      .am-form .am-form-inline-3 select{width: 160px}
+      .am-form .am-form-inline-4 input[type=text]{width: 120px}
+      .am-form .am-form-inline-4 select{width: 120px}
+      .two-input {display: flex;}
+      .am-form .am-form-inline-4 .two-input input[type=text]{width: 50px;}
+      .am-form .am-form-inline-4 .two-input input[type=text]:nth-of-type(2){width: 20px;padding: 8px 2px;cursor: default;background: #fff; border-left: 0; border-right: 0;}
+
+      .am-form input[type=file]{display:none;}
+      .am-form .am-form-group img{max-width: 100px;margin-top: 2px;cursor: pointer;}
+      input[readonly]{background-color: #fff!important;cursor: default!important;}
+      .am-form-group input{
+        height: 30px;font-size: 14px;margin-bottom: 10px !important;
+      }
+      .am-form-group select{
+        height: 30px;font-size: 14px;margin-bottom: 10px !important;
+      }
+      .cc{
+        padding: 7px;
+      }
+      #kucun-table{
+        width: 100%;
+      }
+      #kucun-table th ,#kucun-table td{
+        line-height: 40px;
+        border-bottom: 1px solid #eee;
+        text-align: center;
+      }
+
+    </style>
+
+  </head>
+  <body>
+
+  {include file="public/header" /}
+
+  <div class="am-cf admin-main">
+
+    <!-- sidebar start -->
+    {include file="public/sidebar" nav="cash_goods_shop"/}
+    <!-- sidebar end -->
+
+    <!-- content start -->
+    <div class="content-page" style="overflow-y:scroll; overflow-x:scroll; height: 100%">
+      <div class="content">
+        <div class="card-box" style="overflow: hidden">
+          <div class="am-cf am-padding">
+            <div class="am-fl am-cf">
+              <strong class="am-text-primary am-text-lg">商品管理</strong> /
+              <small>商品列表 / 新增</small>
+            </div>
+          </div>
+          <hr style="margin-top:0px;">
+          <form action="" method="POST" id="saveForm" enctype="multipart/form-data">
+            <div class="am-form">
+              <input type="hidden" name="op" value="save" />
+              <input type="hidden" name="id" value="" />
+              <div class="am-form-group am-form-inline">
+                <div class="am-form-group">
+                  <label>排序<span>（数字越大排序越靠前）</span></label>
+                  <input type="text" name="seat_no" data-type="zs" value="">
+                </div>
+                <div class="am-form-group" style="margin-left:10px;float: right;">
+                  <label style="margin-left: 10px;margin-top: 7px">上下架</label>
+                  <div class="" style="float: left;">
+                    <input type="checkbox" name="status" >
+                    <span class="tttt-switch-btn"></span>
+                    <input type="hidden" name="old_status" value="">
+                  </div>
+
+                </div>
+
+
+                <div class="am-form-group" style="margin-left:10px;float: right;">
+                  <label  style="margin-left: 10px;margin-top: 7px">首页推荐</label>
+                  <div class="" style="float: left;" >
+                    <span class="ttt-switch-btn"></span>
+                    <input type="checkbox" name="home_show" value="1" >
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="am-form-group am-form-inline">
+                <div class="am-form-group">
+                  <label>首页轮播展示图<span>（不上首页可不传）</span></label>
+                  <img src="" id="home_img" onerror="this.src='__ASSETS__/img/add.png'">
+                  <input type="file" name="home_img" value="" accept="image/jpg,image/jpeg,image/png">
+                </div>
+              </div>
+              <div class="am-form-group am-form-inline">
+                <div class="am-form-group">
+
+                  <img src="" id="img_preview" onerror="this.src='__ASSETS__/img/add.png'">
+                  <input type="file" name="img" value="" accept="image/jpg,image/jpeg,image/png">
+                </div>
+                <div class="am-form-group" style="width:220px;">
+                  <label>商品名称 <p>*</p></label>
+                  <input type="text" name="title" value="">
+                </div>
+                <div class="am-form-group" style="width:150px;">
+                  <label>商品编号 </label>
+                  <input type="text" name="model" value="">
+                </div>
+                <script type="text/javascript">
+                    $("#img_preview").on('click',function(){
+                        $("input[name=img]").click();
+                    });
+                    $("input[name=img]").on('change', function() {
+                        var reader = new FileReader();
+                        reader.onload = function(e){
+                            $('#img_preview').attr('src', e.target.result);
+                        }
+                        if(this.files[0]){
+                            reader.readAsDataURL(this.files[0]);
+                        }else{
+                            $('#img_preview').attr('src','');
+                        }
+                    });
+                    $("#home_img").on('click',function(){
+                        $("input[name=home_img]").click();
+                    });
+                    $("input[name=home_img]").on('change', function() {
+                        var reader = new FileReader();
+                        reader.onload = function(e){
+                            $('#home_img').attr('src', e.target.result);
+                        }
+                        if(this.files[0]){
+                            reader.readAsDataURL(this.files[0]);
+                        }else{
+                            $('#home_img').attr('src','');
+                        }
+                    });
+                </script>
+              </div>
+              <div class="am-form-group am-form-inline">
+
+              </div>
+
+              <div class="am-form-group am-form-inline am-form-inline-3">
+
+                <div class="am-form-group">
+                  <label>售价<p>*</p></label>
+                  <input type="text" name="price" data-type="xs" value="" style="width: 130px;">
+                </div>
+
+                <div class="am-form-group">
+                  <label>商品推荐<p>*</p></label>
+                  <select name="is_hot" style="width: 60px;">
+                    <option value="0"  >否</option>
+                    <option value="1" >是</option>
+                  </select>
+                </div>
+                <div class="am-form-group">
+                  <label>猜你喜欢<p>*</p></label>
+                  <select name="is_like" style="width: 60px;">
+                    <option value="0" >否</option>
+                    <option value="1" >是</option>
+                  </select>
+                </div>
+                <div class="am-form-group">
+                  <label>库存<p>*</p></label>
+                  <input type="text" name="total" value="">
+                </div>
+              </div>
+
+              <div class="am-form-group am-form-inline am-form-inline-4">
+
+                <div class="am-form-group">
+                  <label>分类</label>
+                  <select id="two" name="cat_id" style="width: 150px;">
+                    <option value="">请选择</option>
+                    <?php if($cate2_lists){
+                foreach($cate2_lists as $i=>$val){?>
+                    <option value="<?php echo $val['id'] ?>"><?php echo $val['title'] ?></option>}
+                    <?php }
+           } ?>
+                  </select>
+                </div>
+                <div class="am-form-group">
+                  <label>虚拟销量 </label>
+                  <input type="text" name="false_sell" value="">
+                </div>
+
+
+                <script>
+                    $("#one").change(function(){
+
+                        var province=$(this).val();
+
+                        if(province){
+
+                            $.ajax({
+                                type:"post",
+                                url:"{:url('Goods/get_two')}",
+                                async:false,
+                                data: "id="+province,
+                                datatype:'json',
+                                success:function(data){
+                                    // alert(data);
+                                    data=eval("("+data+")");
+                                    var str="<option value=''>请选择二级分类</option>}";
+                                    $.each(data, function(index,val) {
+
+                                        str+="<option value='"+val.id+"'>"+val.title+"</option>";
+
+                                    })
+
+                                    $('#two').html(str);
+
+                                }
+
+                            });
+
+                        }
+
+                    })
+                </script>
+                <script>
+                    $("#two").change(function(){
+
+                        var province=$(this).val();
+
+                        if(province){
+
+                            $.ajax({
+                                type:"post",
+                                url:"{:url('Goods/get_attr')}",
+                                async:false,
+                                data: "id="+province,
+                                datatype:'json',
+                                success:function(data){
+                                    // alert(data);
+                                    data=eval("("+data+")");
+                                    var str="";
+                                    $.each(data, function(i,val) {
+
+                                        str+='<div class="am-form-group am-form-inline am-form-inline-4" id="attr'+val.id+'" >';
+
+                                        str+='<div class="am-form-group" style="width: 80px;text-align: center">'+val.title+'</div>';
+
+                                        str+='<input type="hidden" value="'+val.id+'" name="attr['+i+'][cateattr_id]" >';
+
+                                        str+='<input type="hidden" value="'+i+'" id="attrkey'+val.id+'" >';
+
+                                        str+='<input type="hidden" value="0" id="i'+val.id+'" >';
+
+                                        str+='<div class="am-form-group"><input class="bb" data="'+i+'" key="0" style="width:150px;margin-right: 10px;margin-left: 7px;height: 30px;font-size: 14px;" name="attr['+i+'][data][0][title]" type="text" value="" placeholder="规格名" /></div>';
+                                        str+='<div class="am-form-group"><input class="bb" data="'+i+'" key="0" style="width:150px;height: 30px;font-size: 14px;" name="attr['+i+'][data][0][price]" type="text" value="" placeholder="价格" /></div>';
+
+                                        str+='<div class="am-form-group"><i class="iconfont icon-jia " style="margin-left: 10px" onclick="add_attr('+val.id+')" ><img src="__ASSETS__/img/+++.png" alt="" style="width: 30px;height:30px;margin-bottom: 10px "></i></div>';
+
+                                        str+='</div>'
+
+                                    })
+
+                                    $('#attr_lists').html(str);
+
+                                }
+
+                            });
+
+                        }
+
+                    })
+                </script>
+                <?php if(!empty($iii)){
+        foreach($iii as $i=>$val){?>
+                <input type="hidden" value="<?php echo $val['num']; ?>" id="i<?php echo $val['id']; ?>" >
+                <?php }
+         } ?>
+                <!-- 加 -->
+                <script type="text/javascript">
+                    // alert(i);
+                    function add_attr(id){
+                        var iid="#i"+id;//拼接获取属性长度的名称
+                        var attri="#attrkey"+id; //属性分类的键值
+                        var i=parseInt($(iid).val());//获取当前商品属性长度
+
+                        var attrid="#attr"+id; //拼接属性分类的div id
+
+
+                        // alert(attri);
+                        var attrival=$(attri).val();
+                        // alert(attrival);
+                        var str="";
+                        str +='<div class="am-form-group div_all" style="margin-left: 87px;"><input class="bb" data="'+attrival+'" key="'+(i+1)+'" style="width:150px;margin-left:5px;margin-right: 10px;height: 30px;font-size: 14px;" name="attr['+attrival+'][data]['+(i+1)+'][title]" type="text" value="" placeholder="规格名" /></div>';
+
+                        str+='<div class="am-form-group "><input class="cc" data="'+attrival+'" key="'+(i+1)+'" style="width:150px;margin-left:4px;height: 30px;font-size: 14px;" name="attr['+attrival+'][data]['+(i+1)+'][price] type="text" value="" placeholder="价格" /></div>';
+
+                        str+='<div  class="am-form-group"><i class="iconfont icon-icon-test " style="margin-left: 10px" onclick="sub_attr(this)" ><img src="__ASSETS__/img/---.png" alt="" style="width: 30px;height:30px;margin-bottom: 10px "></i></div>';
+
+                        $(attrid).append(str);
+                        var iadd=i+1; //当前商品属性长度+1
+                        $(iid).val(iadd);
+                    }
+                </script>
+                <!-- 减 -->
+                <script type="text/javascript">
+                    // alert(i);
+                    function sub_attr(a){
+                        var price=$(a).parent().prev();
+
+                        price.prev().remove();
+                        // console.log()
+                        $(a).parent().prev().remove();
+                        $(a).parent().remove();
+                    }
+                </script>
+
+              </div>
+
+              <?php if(!empty($goods['attr_lists'])){?>
+              <div class="am-form-group am-form-inline am-form-inline-4" id="attr_lists">
+                <?php foreach($goods['attr_lists'] as $i=>$val){?>
+
+                <div class="am-form-group am-form-inline am-form-inline-4" id="attr<?php echo $val['id']; ?>">
+
+                  <div class="am-form-group aa" data="<?php echo $val['id']; ?>" style="width: 80px;text-align: center">
+                    <?php echo $val['title']; ?>
+                  </div>
+                  <input type="hidden" class="hiden_input" value="<?php echo $val['id']; ?>" name="attr[<?php echo $i;?>][cateattr_id]" >
+
+                  <input type="hidden" value="<?php echo $i; ?>" id="attrkey<?php echo $val['id'];?>" >
+                  <?php if($val['data']!=""){?>
+                  <?php foreach($val['data'] as $k=>$vel){?>
+                  <input type="hidden" name="attr[<?php echo $i;?>][data][<?php echo $k; ?>][id]" value="<?php echo $vel['id'] ?>" >
+                  <div class="am-form-group">
+                    <input class="bb" data="<?php echo $i;?>" key="<?php echo $k; ?>" style="width:150px;margin-right: 10px;<?php if($k==0){?>margin-left: 8px; <?php }else{?> margin-left: 92px; <?php }?>height: 30px;font-size: 14px;" name="attr[<?php echo $i;?>][data][<?php echo $k; ?>][title]" type="text" value="<?php echo $vel['attr_title'] ?>" placeholder="规格名" />
+                  </div>
+
+                  <div class="am-form-group">
+                    <input class="cc" data="<?php echo $i;?>" key="<?php echo $k; ?>" style="width:150px;height: 30px;font-size: 14px;" name="attr[<?php echo $i;?>][data][<?php echo $k; ?>][price]" type="text" value="<?php echo $vel['attr_price'] ?>" placeholder="价格" />
+                  </div>
+                  <?php if($k==0){?>
+                  <div class="am-form-group">
+                    <i class="iconfont icon-jia" style="margin-left: 5px" onclick="add_attr(<?php echo $val['id']; ?>)" ><img src="__ASSETS__/img/+++.png" alt="" style="width: 30px;height:30px;margin-bottom: 10px "></i>
+                  </div>
+                  <?php } ?>
+                  <?php if($k>0){?>
+                  <div class="am-form-group">
+                    <i class="iconfont icon-icon-test" style="margin-left: 5px" onclick="sub_attr(this)" ><img src="__ASSETS__/img/---.png" alt="" style="width: 30px;height:30px;margin-bottom: 10px "></i>
+                  </div>
+                  <?php } ?>
+                  <?php } ?>
+                  <?php }else{?>
+
+                  <div class="am-form-group">
+                    <input class="bb" data="0" key="0" style="width:150px;margin-right: 10px;margin-left: 8px; height: 30px;font-size: 14px;" name="attr[<?php echo $i;?>][data][0][title]" type="text" value="" placeholder="规格名" />
+                  </div>
+                  <div class="am-form-group">
+                    <input class="cc" data="0" key="0" style="width:150px;height: 30px;font-size: 14px;" name="attr[<?php echo $i;?>][data][0][price]" type="text" value="" placeholder="价格" />
+                  </div>
+                  <div class="am-form-group">
+                    <i class="iconfont icon-jia" style="margin-left: 5px" onclick="add_attr(<?php echo $val['id']; ?>)" ><img src="__ASSETS__/img/+++.png" alt="" style="width: 30px;height:30px;margin-bottom: 10px "></i>
+                  </div>
+                  <?php } ?>
+                </div>
+                <?php }?>
+              </div>
+              <?php }else{?>
+              <div class="am-form-group am-form-inline am-form-inline-4" id="attr_lists">
+              </div>
+              <?php } ?>
+
+
+              <!-- <button type="button" onclick="getdate()">获取</button> -->
+              <!-- <script>
+                function getdate(){
+
+                  var attr = [];
+                  var data = [];
+                  var title = [];
+                  var price =[];
+                  var cateattr_id = "";
+
+                  $(".aa").each(function(i){
+                     cateattr_id =$(this).attr("data");
+
+                      $(".bb").each(function(x){
+                        var keyb=$(this).attr("key");
+                        var valb=$(this).val();
+                        attr[i]['cateattr_id'][data][keyb]['title']=valb;
+                      })
+                      $(".cc").each(function(y){
+                        var keyc=$(this).attr("key");
+                        var valc=$(this).val();
+                        attr[i]['cateattr_id'][data][keyc]['price']=valc;
+                      })
+
+
+
+                  })
+
+                  alert(attr);
+                }
+              </script> -->
+              <div class="am-form-group am-form-inline am-form-inline-2">
+                <div style="display: block;">
+                  <label>轮播图<span>（最多9张）</span></label>
+                </div>
+                {for start="0" end="9"}
+                  <div class="am-form-group" style="margin-right: 3px">
+                    <img src="<?php if(!empty($goods['imgs_'.$i])) echo $goods['imgs_'.$i];?>" class="select-img" onerror="this.src='__ASSETS__/img/add.png'" data-num="{$i}">
+                    <input type="file" name="imgs_{$i}" class="input-img" accept="image/jpg,image/jpeg,image/png">
+                  </div>
+                {/for}
+                <input type="hidden" name="imgs_dele">
+                <script type="text/javascript">
+                    $(".select-img").on('click',function(){
+                        var that = $(this);
+                        var src = that.prop("src");
+                        if(src && src.indexOf("__ASSETS__/img/add.png")==-1){
+                            layer.open({
+                                title:'',closeBtn:0,shade:0.2,shadeClose:true,btn:['确定','取消'],
+                                content:"确定删除这张图片吗",yes:function(index){
+                                    that.prop("src","");
+                                    that.next("input[type=file]").val("");
+                                    $("input[name=imgs_dele]").val($("input[name=imgs_dele]").val()+","+that.data("num"));
+                                    layer.close(index);
+                                }
+                            });
+                        }else{
+                            that.next("input[type=file]").click();
+                        }
+                    });
+                    $(".input-img").on('change', function() {
+                        var that = $(this);
+                        var reader = new FileReader();
+                        reader.onload = function(e){
+                            that.prev("img").attr('src', e.target.result);
+                        }
+                        if(this.files[0]){
+                            reader.readAsDataURL(this.files[0]);
+                        }else{
+                            that.prev("img").attr('src','');
+                        }
+                    });
+                </script>
+              </div>
+            </div>
+            <div class="am-form">
+
+              <div class="am-form-group">
+                <label>简介</label>
+                <script id="editor1" type="text/plain" style="width:500px;height:200px"></script>
+                  <input type="hidden" name="parameter" value="">
+                      </div>
+                      <div class="am-form-group">
+                      <label>商品详情</label>
+                      <script id="editor" type="text/plain" style="width:500px;height:200px"></script>
+                <input type="hidden" name="content" value="">
+              </div>
+              <button type="submit" class="am-btn am-btn-success"  style="background-color:orange;border-color:orange;margin-bottom: 50px;margin-left: 20px;" name="save" value="222" style="margin-bottom: 50px;">保存并生成组合库存</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+      <footer class="admin-content-footer"><hr></footer>
+    </div>
+    <!-- content end -->
+  </div>
+
+  {include file="public/footer" /}
+  <script type="text/javascript">
+      function layert(content){ layer.open({title:'',content:content,shade:0.2,closeBtn:0}); }
+      var ue = UE.getEditor('editor');
+      ue.ready(function() {
+          ue.setContent($("input[name=content]").val());
+      });
+
+      function layert1(content){ layer.open({title:'',content:content,shade:0.2,closeBtn:0}); }
+      var ue1 = UE.getEditor('editor1');
+      ue1.ready(function() {
+          ue1.setContent($("input[name=parameter]").val());
+      });
+
+
+
+
+
+      $(function(){
+          $("input[data-type=xs]").on('input',function(e){
+              $(this).val($(this).val().replace('。','.').replace(/[^\d.]/g,''));
+          });
+          $("input[data-type=zs]").on('input',function(e){
+              $(this).val($(this).val().replace('。','.').replace(/[^\-?\d]/g,''));
+          });
+          $("input[data-type=zzs]").on('input',function(e){
+              $(this).val($(this).val().replace('。','.').replace(/[^0-9]+/g,''));
+          });
+
+
+          $("#form_submit").on('click',function(){
+              $("input[name=content]").val(ue.getContent());
+              $("input[name=parameter]").val(ue1.getContent());
+              var title = $("input[name=title]").val();
+              var price = $("input[name=price]").val();
+              var total = $("input[name=total]").val();
+              // var cate_id = $("input[name=cat_id]").val();
+              // var orig_price = $("input[name=orig_price]").val();
+              // var deposit = $("input[name=deposit]").val();
+              var model = $("input[name=model]").val();
+              // var supply_personal = $("select[name=supply_personal]").find('option:selected').val();
+              // var supply_business = $("select[name=supply_business]").find('option:selected').val();
+              var supply_sn = $("input[name=supply_sn]").val();
+              var supply_total = $("input[name=supply_total]").val();
+              var supply_price = $("input[name=supply_price]").val();
+
+              if(!title) layer.msg('请填写商品名称');
+              // else if(!price)layer.msg('请填写首周价格');
+              else if(!price)layer.msg('请填写售价');
+              else if(!total)layer.msg('请填写库存');
+              // else if(!cate_id)layer.msg('请选择分类');
+              // else if(!price2)layer.msg('请填写续租价格');
+              // else if(!orig_price)layer.msg('请填写原价');
+              // else if(!deposit)layer.msg('请填写押金');
+              else if(!model)layer.msg('请填写商品编号');
+              // else if( (supply_sn || supply_total || supply_price) && (!supply_sn || !supply_total || !supply_price) ) layer.msg('请完整填写供方编号、供应件数、供应总金额');
+              else $("#saveForm").submit();
+          });
+
+      });
+  </script>
+  </body>
+  </html>

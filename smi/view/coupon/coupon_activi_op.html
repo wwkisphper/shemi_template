@@ -1,0 +1,281 @@
+ <!doctype html>
+    <html class="no-js">
+    <head>
+        {include file="public/head" /}
+        <style type="text/css">
+            .am-form{width:500px;margin-left:20px;float: left;}
+            #editor {font-size: 12px;}
+            .am-form label span{font-size: 13px;font-weight:normal;}
+        </style>
+
+    </head>
+    <body>
+    {include file="public/header" /}
+
+    <div class="am-cf admin-main">
+
+        <!-- sidebar start -->
+        {include file="public/sidebar" nav="coupon"/}
+        <!-- sidebar end -->
+
+        <!-- content start -->
+        <div class="content-page">
+            <div class="content">
+                <div class="card-box" style="overflow: hidden">
+                    <div class="am-cf am-padding">
+                        <div class="am-fl am-cf">
+                            <strong class="am-text-primary am-text-lg">优惠券管理</strong> /
+                            <small><?php echo empty($id)?"编辑活动":"新增活动"; ?></small>
+                        </div>
+                    </div>
+                    <hr style="margin-top:0px;">
+                    <div style="width: auto;height: auto;">
+                        <form class="am-form" action="" method="POST" id="saveForm" enctype="multipart/form-data" style="clear: both;width: 800px !important;">
+
+                            <input type="hidden" name="op" value="save" />
+                            <input type="hidden" name="id" value="{$id}" />
+                            <div class="am-form-group am-form-inline">
+                                <div class="am-form-group">
+                                    <label>排序<span>（数字越大排序越靠前）</span></label>
+                                    <input type="text" name="seat_no" value="{$data.seat_no}">
+                                </div>
+                                <div class="am-form-group" style="margin-right:450px;float: right;width: 70px;margin-top: 30px">
+                                    <label style="margin-left: 10px;margin-top: 7px">启用</label>
+                                    <div class="ttt-switch" style="float: left;margin-top: 7px">
+                                        <input type="checkbox" name="status" <?php if($data['status']=="1") echo "checked";?>>
+                                        <span class="ttt-switch-btn"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="am-form-group am-form-inline am-form-inline-4">
+                                <div class="am-form-group">
+                                    <label>一级分类</label>
+                                    <select name="cate_id" id="one" style="width: 150px;">
+                                        <option value="">请选择</option>
+                                        <option value="0">无限制类目</option>
+                                        <?php foreach($pid_lists as $i=>$val){?>
+                                        <option value="<?php echo $val['id'] ?>" <?php if($val['id']==$data['cate_id']){?> selected = "selected" <?php } ?> ><?php echo $val['title'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <label>活动优惠券</label>
+                            <div class="am-form-group" id="coupon_lists" style="overflow: hidden;">
+
+                                <?php if(!empty($data['id'])){?>
+                                <?php if(!empty($coupon_lists)){?>
+                                <?php foreach($coupon_lists as $i =>$val){ ?>
+                                <div style="overflow: hidden;">
+                                    <input type="checkbox" name="coupon[]" value="<?php echo $val['id'] ?>"
+                                    <?php foreach($activi_coupon as $v=>$vol){if($val['id']==$vol){?>checked="checked"<?php }  } ?>  style="float: left" >
+                                    <div style="width: 250px;float: left;text-align: center;">
+                                        <?php echo $val['title'] ?>
+                                    </div>
+                                    <div style="width: 250px;float: left;text-align: center;">
+                                        说明：满<?php echo $val['sale'] ?>减<?php echo $val['minus'] ?>
+                                    </div>
+                                    <div style="width: 150px;float: left;text-align: center;">
+                                        使用天数：<?php echo $val['term'] ?>天
+                                    </div>
+                                    <!--<div style="width: 120px;float: left;text-align: center;">-->
+                                        <!--库存：<?php echo $val['total'] ?>-->
+                                    <!--</div>-->
+                                </div>
+                                <?php } ?>
+                                <?php }else{?>
+                                <div style="overflow: hidden; ">
+                                    <div class="am-panel-bd" style="font-size:14px;padding:5px 10px;"><b style="color:red">选择分类后选择优惠券。</b><br> </div>
+                                </div>
+
+                                <?php } ?>
+                                <?php } ?>
+
+                            </div>
+
+                            <div class="am-form-group">
+                                <label>活动标题</label>
+                                <input type="text" name="title" value="{$data.title}">
+                            </div>
+
+                            <div class="am-form-group">
+                                <label>活动封面<if condition="$data[id]"><span>（若不修改请留空）</span></if></label>
+                                <input type="file" name="img" value="{$data.img}" accept="image/jpg,image/jpeg,image/png" >
+                            </div>
+
+                            <div class="am-form-group">
+                                <label>活动简介</label>
+                                <input type="text" name="content" value="{$data.content}">
+                            </div>
+
+                            <div class="am-form-group">
+                                <label>活动开始时间</label>
+                                <input type="datetime-local" name="start_time" value="<?php echo date('Y-m-d H:i',$data['start_time']) ?>" style="width: 250px !important;">
+                                <?php if($data['id']){?>
+                                <div class="am-panel-bd" style="font-size:14px;padding:5px 10px;"><b style="color:red"> 已设置： </b><?php echo date('Y-m-d H:i',$data['start_time']) ?><br> </div>
+                                <?php } ?>
+                            </div>
+
+                            <div class="am-form-group">
+                                <label>活动结束时间</label>
+                                <input type="datetime-local" name="end_time" value="<?php echo date('Y-m-d H:i',$data['end_time']) ?>" style="width: 250px !important;">
+                                <?php if($data['id']){?>
+                                <div class="am-panel-bd" style="font-size:14px;padding:5px 10px;"><b style="color:red"> 已设置： </b><?php echo date('Y-m-d H:i',$data['end_time']) ?><br> </div>
+                                <?php } ?>
+                            </div>
+
+                            <button type="button" class="am-btn am-btn-default" id="form_submit">保存</button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $("#one").change(function(){
+
+                    var province=$(this).val();
+
+                    if(province!=""&&province!=0){
+
+                        $.ajax({
+                            type:"post",
+                            url:"{:url('coupon/get_two')}",
+                            async:false,
+                            data: "id="+province,
+                            datatype:'json',
+                            success:function(data){
+                                // alert(data);
+                                data=eval("("+data+")");
+                                var str ='<option value="0">无限制类目</option>';
+                                $.each(data, function(index,val) {
+
+                                    str+="<option value='"+val.id+"'>"+val.title+"</option>";
+
+                                })
+                                str +='</select>';
+                                $('#two').html(str);
+
+                            }
+
+                        });
+
+                    }
+
+                })
+            </script>
+            <script>
+                $("#one").change(function(){
+
+                    var province=$(this).val();
+
+                    if(province){
+
+                        $.ajax({
+                            type:"post",
+                            url:"{:url('Coupon/get_coupon')}",
+                            async:false,
+                            data: "id="+province,
+                            datatype:'json',
+                            success:function(data){
+                                // alert(data);
+                                data=eval("("+data+")");
+                                var str="";
+                                $.each(data, function(i,val) {
+
+                                    str+='<div style="overflow: hidden;">';
+
+                                    str+='<input type="checkbox" name="coupon['+i+']" value="'+val.id+'" style="float: left">';
+
+                                    str+='<div style="width: 250px;float: left;text-align: center;">'+val.title+'</div>';
+
+                                    str+='<div style="width: 250px;float: left;text-align: center;">说明：满'+val.sale+'减'+val.minus+'</div>';
+
+                                    str+='<div style="width: 150px;float: left;text-align: center;">使用天数：'+val.term+'天</div>';
+
+                                    // str+='<div style="width: 120px;float: left;text-align: center;">库存：'+val.total+'</div>';
+
+                                    str+='</div>';
+                                })
+
+                                $('#coupon_lists').html(str);
+
+                            }
+
+                        });
+
+                    }
+
+                })
+
+                $("#two").change(function(){
+                    var province1=$('#one').val();
+                    var province2=$(this).val();
+
+                    if(province1&&province2){
+
+                        $.ajax({
+                            type:"post",
+                            url:"{:url('Coupon/get_coupon')}",
+                            async:false,
+                            data: {
+                                id:province1,
+                                id2:province2,
+                            },
+                            datatype:'json',
+                            success:function(data){
+                                // alert(data);
+                                data=eval("("+data+")");
+                                var str="";
+                                $.each(data, function(i,val) {
+
+                                    str+='<div style="overflow: hidden;">';
+
+                                    str+='<input type="checkbox" name="coupon['+i+']" value="'+val.id+'" style="float: left">';
+
+                                    str+='<div style="width: 250px;float: left;text-align: center;">'+val.title+'</div>';
+
+                                    str+='<div style="width: 250px;float: left;text-align: center;">说明：满'+val.sale+'减'+val.minus+'</div>';
+
+                                    str+='<div style="width: 150px;float: left;text-align: center;">使用天数：'+val.term+'天</div>';
+
+                                    // str+='<div style="width: 120px;float: left;text-align: center;">库存：'+val.total+'</div>';
+
+                                    str+='</div>';
+                                })
+
+                                $('#coupon_lists').html(str);
+
+                            }
+
+                        });
+
+                    }
+
+                })
+            </script>
+            <script type="text/javascript">
+                function layert(content){ layer.open({title:'',content:content,shade:0.2}); }
+                $(function(){
+                    $("#form_submit").on('click',function(){
+                        // var type = $("select[name=type] option:selected").val();
+                        // var brand_id = $("select[name=brand_id] option:selected").val();
+                        // var title = $("input[name=title]").val();
+                        // var content = ue.getContent();
+                        // if(!type) layert('请选择分类');
+                        // else if(!brand_id)layert('请选择品牌');
+                        // else if(!title)layert('请填写标题');
+                        // else if(!content)layert('请填写内容');
+                        // else $("#saveForm").submit();
+                        $("#saveForm").submit();
+                    });
+                });
+            </script>
+            <footer class="admin-content-footer"><hr></footer>
+        </div>
+        <!-- content end -->
+    </div>
+
+    {include file="public/footer" /}
+
+    </body>
+    </html>

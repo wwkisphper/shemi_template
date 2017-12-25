@@ -1,0 +1,195 @@
+<include file="Common/foot" />
+  <!doctype html>
+  <html class="no-js">
+  <head>
+    <style type="text/css">
+      a.am-text-secondary:visited{color:#3bb4f2;}
+      a.am-text-danger:visited{color:#dd514c;}
+      .am-btn-default {background-color: #fff;}
+      th {text-align:center;}
+      tr td{text-align:center;}
+      select{padding: 4px;border: 1px solid #ccc;}
+      .am-popup-bd {background:#fff;}
+      .am-popup-bd img {max-width: 100%}
+      .am-u-sm-2 {border-top: 1px solid #ddd;margin-top: 10px;}
+      .am-u-sm-10 {border-left: 1px solid #ddd;margin-top: 10px;}
+      .am-table>tbody>tr>td.user-info {padding: 1px;text-align: left;}
+      .am-table>tbody>tr>td.user-info img{height: 42px}
+      myred{color:#dd514c;}
+      mygreen {color:#1aad19;}
+      mygery {color:#999;}
+      .wxgreen {color:#1aad19;}
+      .search-div.am-input-group .am-form-field{width:120px;float: right;}
+      .search-div select {float: right;}
+      .ttt-switch {margin: 0 auto;}
+      .am-form select{
+        font-size: 1.2rem;
+        border-color: #e6e6e6;
+        width: unset;
+        padding: .5em 2em .5em 1em;
+        margin: 0 auto;
+      }
+      .am-table>tbody>tr>td.td-img {
+        padding: 1px;
+        text-align: left;
+      }
+      .am-table>tbody>tr>td.td-img img {
+        height: 42px;
+        float: right;
+      }
+    </style>
+    {include file="public/head" /}
+
+  </head>
+  <body>
+
+  {include file="public/header" /}
+
+  <div class="am-cf admin-main">
+
+    {include file="public/sidebar" nav="share"/}
+    <div class="content-page">
+    <div class="content">
+      <div class="card-box">
+        <div class="am-cf am-padding">
+          <div class="am-fl am-cf">
+            <strong class="am-text-primary am-text-lg">分销管理</strong> /
+            <small>佣金提现审核</small>
+          </div>
+        </div>
+        <hr style="margin-top:0px;">
+
+        <div class="am-g">
+          <div class="am-u-sm-12 am-u-md-4">
+            <div class="am-btn-toolbar">
+              <div class="am-btn-group am-btn-group-xs">
+
+              </div>
+
+            </div>
+          </div>
+          <form class="am-form-group am-u-sm-12 am-u-md-8">
+            <div class="am-input-group am-input-group-sm search-div">
+              <input type="text" class="am-form-field" name="title" placeholder="姓名或银行卡号" value="{$title}">
+              <select name="type" class="am-form-field" style="width:100px;float:right;">
+                <option value="">全部</option>
+                <option value="0">未审核</option>
+                <option value="1">已通过</option>
+                <option value="2">未通过</option>
+              </select>
+              <span class="am-input-group-btn">
+            <button class="am-btn am-btn-default" type="submit">搜索</button>
+          </span>
+              <script type="text/javascript">
+                  $(function(){
+                  <?php if(!empty($type)) echo '$("select[name=type]").val("'.$type.'");';?>
+                  });
+              </script>
+            </div>
+          </form>
+        </div>
+        <div class="am-g">
+          <div class="am-u-sm-12">
+            <form class="am-form am-scrollable-horizontal">
+              <table class="am-table table-main am-text-nowrap">
+                <thead>
+                <tr>
+                  <!-- <th width="5%">排序</th> -->
+                  <th style="text-align: center" width="5%">ID</th>
+                  <th style="text-align: center" width="5%">用户id</th>
+                  <!-- <th width="5%"></th> -->
+                  <th style="text-align: center" width="5%">姓名</th>
+                  <th style="text-align: center" width="5%">银行卡号</th>
+                  <th style="text-align: center" width="5%">提现金额</th>
+                  <th style="text-align: center" width="5%">开户行</th>
+                  <th style="text-align: center" width="5%">申请时间</th>
+                  <!-- <th width="5%">审核时间</th> -->
+                  <th style="text-align: center" width="5%">状态</th>
+                  <!-- <th width="5%">审核</th> -->
+
+                  <th width="5%">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {if  condition="count($list) eq 0"}
+                  <tr><td colspan="16" style="text-align:center;">这里啥都没有</td></tr>
+                {/if}
+                {volist name="list" id="vo" key="k"}
+                  <tr>
+                    <td >{$vo.id}</td>
+                    <td>{$vo.user_id}</td>
+                    <td>{$vo.name}</td>
+                    <td>{$vo.card_number}</td>
+                    <td>{$vo.money}</td>
+                    <td>{$vo.bank}</td>
+                    <td><?php echo date('Y-m-d H:i',$vo['addtime']) ?></td>
+                    <td>
+                      <?php if($vo['status']==0){?> 未审核  <?php } ?>
+                      <?php if($vo['status']==1){?> 已审核  <?php } ?>
+                      <?php if($vo['status']==2){?> 未通过  <?php } ?>
+                    </td>
+
+                    <td style="padding:.45rem;">
+                      <!-- <a  class="am-btn am-btn-default am-btn-xs">编辑</a> -->
+                      <?php if($vo['status']==0){?>
+                      <a  class="am-btn am-btn-default am-btn-xs" onclick="pass_apply(<?php echo $vo['user_id'] ?>,<?php echo $vo['id'] ?>,1,<?php echo $vo['money'] ?>)">通过</a>
+                      <a  class="am-btn am-btn-default am-btn-xs" onclick="pass_apply(<?php echo $vo['user_id'] ?>,<?php echo $vo['id'] ?>,2,<?php echo $vo['money'] ?>)">不通过</a>
+                      <a href="{:url('coupon_op')}?op=dele&id={$vo.id}" class="am-btn am-btn-danger am-btn-xs" onclick="return confirm('确定删除吗')">删除</a>
+                      <?php } ?>
+                    </td>
+                  </tr>
+                {/volist}
+                </tbody>
+              </table>
+            </form>
+            <div class="am-cf">
+              <div class="am-fr">
+                {$list->render()}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="admin-content-footer"><hr></footer>
+    </div>
+  </div>
+
+  {include file="public/footer" /}
+  </body>
+  <script>
+      function pass_apply(userid,id,status,money){
+
+          $.ajax({
+
+              type:"post",
+              url:"<?php echo url('Share/pass_cash') ?>",
+              async:false,
+              data: {
+                  id:id,
+                  status:status,
+                  userid:userid,
+                  money:money,
+              },
+              datatype:'json',
+              success:function(data){
+
+                  if(data==10000){
+                      alert('审核成功!');
+                      location.href="";
+                  };
+                  if(data==20000){
+                      alert('审核失败!');
+                      location.href="";
+                  };
+
+              }
+
+          });
+
+
+      }
+  </script>
+  </html>

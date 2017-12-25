@@ -64,6 +64,9 @@ class Prize extends Model
 
 		$success = db('Winning_record') -> insert($data);
 		
-		return $success;
+		$result['success'] = $success;
+		$result['prize_name'] = $prizeData['name'];
+
+		return $result;
 	}
 }

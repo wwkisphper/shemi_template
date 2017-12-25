@@ -196,10 +196,55 @@
                                 大转盘管理
                             </a>
                         </li>
+                        <li>
+                            <a href="{:url('Prize/AdminPumpingRecord')}">
+                                <span class="am-icon-calendar"></span>
+                                大转盘中奖记录
+                            </a>
+                        </li>
                         {php} } {/php}
                     </ul>
                 </li>
                 {php} } {/php}
+            {php} if(in_array(5,$added)){ {/php}
+            <li class="admin-parent">
+                <a class="am-cf" data-am-collapse="{target: '#cash_goods_shop-nav'}">
+                    <span class="am-icon-list-ul"></span>
+                    现金商城管理
+                    <span class="am-icon-angle-right am-fr am-margin-right"></span>
+                </a>
+                <ul class="am-list am-collapse admin-sidebar-sub {if condition="'[nav]' eq 'cash_goods_shop'"}am-in{/if}" id="cash_goods_shop-nav">
+            <li>
+                <a href="{:url('Goods/goods_cat_child')}" class="am-cf">
+                    <span class="am-icon-calendar"></span>
+                    现金商品分类列表
+                </a>
+            </li>
+            <li>
+                <a href="{:url('Goods/goods')}" class="am-cf">
+                    <span class="am-icon-calendar"></span>
+                    现金商品列表
+                </a>
+            </li>
+            <li>
+                <a href="{:url('Order/goods_order_list')}" class="am-cf">
+                    <span class="am-icon-calendar"></span>
+                    订单列表
+                </a>
+            </li>
+
+            <li>
+                <a href="{:url('Homepage/swiper')}" class="am-cf">
+                    <span class="am-icon-calendar"></span>
+                    轮播管理
+                </a>
+            </li>
+
+
+            </ul>
+            </li>
+            {php} } {/php}
+
 
                 <li class="admin-parent">
                     <a class="am-cf" data-am-collapse="{target: '#statistics-nav'}">
@@ -230,7 +275,62 @@
                         {php} } {/php}
                     </ul>
                 </li>
-                
+
+            {php} if(in_array(5,$added)){ {/php}
+            <li class="admin-parent">
+                <a class="am-cf" data-am-collapse="{target: '#share-nav'}">
+                    <span class="am-icon-list-ul"></span>
+                    分销管理
+                    <span class="am-icon-angle-right am-fr am-margin-right"></span>
+                </a>
+                <ul class="am-list am-collapse admin-sidebar-sub {if condition="'[nav]' eq 'share'"}am-in{/if}" id="share-nav">
+
+            <li>
+                <a href="{:url('Share/share_config')}" class="am-cf">
+                    <span class="am-icon-calendar"></span>
+                    分销配置
+                </a>
+            </li>
+            <li>
+                <a href="{:url('Share/share_apply')}" class="am-cf">
+                    <span class="am-icon-calendar"></span>
+                    分销申请审核
+                </a>
+            </li>
+            <li>
+                <a href="{:url('Share/cash_apply')}" class="am-cf">
+                    <span class="am-icon-calendar"></span>
+                    佣金提现审核
+                </a>
+            </li>
+
+            </ul>
+            </li>
+            {php} } {/php}
+            {php} if(in_array(5,$added)){ {/php}
+            <li class="admin-parent">
+                <a class="am-cf" data-am-collapse="{target: '#coupon-nav'}">
+                    <span class="am-icon-list-ul"></span>
+                    优惠券管理
+                    <span class="am-icon-angle-right am-fr am-margin-right"></span>
+                </a>
+                <ul class="am-list am-collapse admin-sidebar-sub {if condition="'[nav]' eq 'coupon'"}am-in{/if}" id="coupon-nav">
+
+            <li>
+                <a href="{:url('Coupon/coupon_activi_list')}" class="am-cf">
+                    <span class="am-icon-calendar"></span>
+                    优惠券活动列表
+                </a>
+            </li>
+            <li>
+                <a href="{:url('Coupon/coupon_list')}" class="am-cf">
+                    <span class="am-icon-calendar"></span>
+                    优惠券列表
+                </a>
+            </li>
+            </ul>
+            </li>
+            {php} } {/php}
                 
             </ul>
             <br>

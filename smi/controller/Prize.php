@@ -97,20 +97,43 @@ class Prize extends Base
 		$keyword = input('get.keyword');
 
 		$list = db('Winning_record')
-		-> field('w.name,w.picture,w.status,w.create_time,u.nickname')
+		-> field('w.id,w.name,w.picture,w.status,w.create_time,u.nickname')
 		-> alias('w')
 		-> join('order_user u',"u.id=w.uid AND w.admin_id={$adminId}")
 		-> where('u.nickname','like',"{$keyword}%")
-		-> order('id DESC')
+		-> order('w.id DESC')
 		-> paginate(10,false,['query' => array('keyword' => $keyword)]);
 
 		$data = $list -> all();
 		$page = $list -> render();
+
+		$data = TimeConversions($data,'create_time');
 
 		$this -> assign('data',$data);
 		$this -> assign('page',$page);
 		$this -> assign('keyword',$keyword);
 
 		return $this -> fetch('pumping_record');
+	}
+
+	//确认已兑奖
+	public function RecordStatusAlter(){
+		$adminId = session('admin_id');
+		$id = input('get.id');
+		$check = CheckPermissions($adminId,'Winning_record','admin_id',$id);	//检查商户是否有权限操作该记录
+        if(!$check){
+        	die;
+        }
+
+        $data['id'] = $id;
+        $data['status'] = 1;
+
+        $success = db('Winning_record') -> update($data);
+        if($success){
+        	$this -> success('修改成功','Prize/AdminPumpingRecord');
+        }else{
+        	$this -> error('修改失败');
+        }
+
 	}
 }

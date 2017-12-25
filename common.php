@@ -272,6 +272,30 @@ function upload($keyname,$dirname=''){
     return $result;
 
 }
+/*
+    文件上传函数
+    @param char $keyname 文件上传的字段名
+ */
+
+function upload_goods($keyname,$dirname=''){
+    // 获取表单上传文件
+    $files[] = request()->file($keyname);
+    foreach($files as $file){
+        // 移动到框架应用根目录/public/uploads/ 目录下
+        $info = $file->validate(['size'=>2145728,'ext'=>'jpg,png,gif,jpeg'])->move(ROOT_PATH . 'public/uploads/'.$dirname);
+        if($info){
+            // 成功上传后 获取上传信息
+            $savename[] =  $info->getSaveName();
+        }else{
+            // 上传失败获取错误信息
+//             echo "<script>alert('".$file->getError()."');location.href=history.back();</script>";die;
+        }
+    }
+
+    $result = implode(',',$savename);
+    return $result;
+
+}
 
 /*
     删除原图片

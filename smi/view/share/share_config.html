@@ -1,0 +1,123 @@
+<!doctype html>
+  <html class="no-js">
+  <head>
+    <style type="text/css">
+      .am-form{width:500px;margin-left:20px;float: left;}
+      #editor {font-size: 12px;}
+      .am-form label span{font-size: 13px;font-weight:normal;}
+    </style>
+    {include file="public/head" /}
+
+  </head>
+  <body>
+
+  {include file="public/header" /}
+
+  <div class="am-cf admin-main">
+    {include file="public/sidebar" nav="share"/}
+    <div class="content">
+      <div class="card-box" style="overflow: hidden">
+        <div class="am-cf am-padding">
+          <div class="am-fl am-cf">
+            <strong class="am-text-primary am-text-lg">分销管理</strong> /
+            <small>分销配置</small>
+          </div>
+        </div>
+        <hr style="margin-top:0px;">
+        <div style="width: auto;height: auto;">
+          <form class="am-form" action="" method="POST" id="saveForm" enctype="multipart/form-data" style="clear: both;width: 800px !important;">
+
+            <input type="hidden" name="op" value="save" />
+            <input type="hidden" name="id" value="{$data.id}" />
+            <div class="am-form-group am-form-inline">
+
+            </div>
+
+
+
+            <div class="am-form-group">
+              <label>分销总开关</label>
+
+            </div>
+            <div class="am-form-group">
+              <input type="radio" name="switch" value="0" <?php if($data['switch']==0){?> checked="checked" <?php } ?>> 关闭
+              <input type="radio" name="switch" value="1" style="margin-left: 30px;" <?php if($data['switch']==1){?> checked="checked" <?php } ?> > 开启
+            </div>
+
+            <div class="am-form-group">
+              <label>获取分销身份金额<span>（消费达到此金额成为分销者）</span></label>
+              <input type="text" name="amount" value="{$data.amount}" placeholder="如:2000" style="width: 200px;text-align: center;">
+            </div>
+
+            <div class="am-form-group">
+              <label>一级分销分成<span>（上级分销）</span></label>
+              <input type="text" name="one_share" value="{$data.one_share}" placeholder="如:0.1" style="width: 200px;text-align: center;">
+            </div>
+
+            <div class="am-form-group">
+              <label>二级分销分成<span>（上上级分销）</span></label>
+              <input type="text" name="two_share" value="{$data.two_share}" placeholder="如:0.1" style="width: 200px;text-align: center;">
+            </div>
+
+
+            <button type="button" class="am-btn am-btn-default" id="form_submit">保存</button>
+
+          </form>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+        function layert(content){ layer.open({title:'',content:content,shade:0.2}); }
+        $(function(){
+            $("#form_submit").on('click',function(){
+                // var type = $("select[name=type] option:selected").val();
+                // var brand_id = $("select[name=brand_id] option:selected").val();
+                // var title = $("input[name=title]").val();
+                // var content = ue.getContent();
+                // if(!type) layert('请选择分类');
+                // else if(!brand_id)layert('请选择品牌');
+                // else if(!title)layert('请填写标题');
+                // else if(!content)layert('请填写内容');
+                // else $("#saveForm").submit();
+                $("#saveForm").submit();
+            });
+        });
+    </script>
+    <footer class="admin-content-footer"><hr></footer>
+  </div>
+
+  {include file="public/footer" /}
+  </body>
+  <script>
+      function pass_apply(userid,id,status){
+
+          $.ajax({
+
+              type:"post",
+              url:"<?php echo url('Share/pass_apply') ?>",
+              async:false,
+              data: {
+                  id:id,
+                  status:status,
+                  userid:userid,
+              },
+              datatype:'json',
+              success:function(data){
+
+                  if(data==10000){
+                      alert('审核成功!');
+                      location.href="";
+                  };
+                  if(data==20000){
+                      alert('审核失败!');
+                      location.href="";
+                  };
+
+              }
+
+          });
+
+
+      }
+  </script>
+  </html>

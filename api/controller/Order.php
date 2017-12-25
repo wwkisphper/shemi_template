@@ -3,6 +3,7 @@ namespace app\api\controller;
 
 use think\Controller;
 use think\Db;
+use think\Exception;
 use think\Loader;
 
 class Order extends Controller
@@ -84,7 +85,7 @@ class Order extends Controller
         do{
             $data['number'] = date('YmdHis').mt_rand(10000,99999);
         }while(in_array($data['number'], $orderNumber));
-        
+
         //获得服务的信息
         $ServeData = db('Serve') -> field('serve_name,picture') -> where('id',$data['sid']) -> find();
         $ServeData['picture'] = explode(',',$ServeData['picture']);
@@ -100,73 +101,73 @@ class Order extends Controller
         }
 
         if($data['opayway'] == 1){
-        	Db::commit();
-        	$adminData = db('Admin') -> field('sms_switch,sms_phone,sms_account_number,sms_password,sms_signature,email_switch,email_to') -> find($data['admin_id']);
+            Db::commit();
+            $adminData = db('Admin') -> field('sms_switch,sms_phone,sms_account_number,sms_password,sms_signature,email_switch,email_to') -> find($data['admin_id']);
 
-        	//发送短信
-        	if($adminData['sms_switch'] && $adminData['sms_phone'] && $adminData['sms_account_number'] && $adminData['sms_password'] && $adminData['sms_signature']){
-        		Loader::import('ChuanglanSmsHelper.ChuanglanSmsApi');
-        		$clapi  = new \ChuanglanSmsApi();
-        		$clapi -> API_ACCOUNT = $adminData['sms_account_number'];
-        		$clapi -> API_PASSWORD = $adminData['sms_password'];
-        		$clapi -> sendSMS($adminData['sms_phone'],"【{$adminData['sms_signature']}】您有一个新的预约订单，请及时登录后台处理。预约服务：{$data['serve_name']}，姓名：{$data['name']}，联系电话：{$data['phone']}，留言：{$data['message']}，预约时间：".date('Y-m-d H:i:s',$data['order_time']));
-        	}
+            //发送短信
+            if($adminData['sms_switch'] && $adminData['sms_phone'] && $adminData['sms_account_number'] && $adminData['sms_password'] && $adminData['sms_signature']){
+                Loader::import('ChuanglanSmsHelper.ChuanglanSmsApi');
+                $clapi  = new \ChuanglanSmsApi();
+                $clapi -> API_ACCOUNT = $adminData['sms_account_number'];
+                $clapi -> API_PASSWORD = $adminData['sms_password'];
+                $clapi -> sendSMS($adminData['sms_phone'],"【{$adminData['sms_signature']}】您有一个新的预约订单，请及时登录后台处理。预约服务：{$data['serve_name']}，姓名：{$data['name']}，联系电话：{$data['phone']}，留言：{$data['message']}，预约时间：".date('Y-m-d H:i:s',$data['order_time']));
+            }
 
-        	//发送邮箱
-        	if($adminData['email_switch'] && $adminData['email_to']){
-        		$toemail = $adminData['email_to'];
-		        $name = '尊敬的客户';
-		        $subject = '预约订单通知';
-		        $content= "您有一个新的预约订单，请及时登录后台处理。预约服务：{$data['serve_name']}，姓名：{$data['name']}，联系电话：{$data['phone']}，留言：{$data['message']}，预约时间：".date('Y-m-d H:i:s',$data['order_time']);
-		        send_mail($toemail,$name,$subject,$content);
-        	}
-			header('Content-Type:application/json; charset=utf-8');
-        	return json_encode($info);
+            //发送邮箱
+            if($adminData['email_switch'] && $adminData['email_to']){
+                $toemail = $adminData['email_to'];
+                $name = '尊敬的客户';
+                $subject = '预约订单通知';
+                $content= "您有一个新的预约订单，请及时登录后台处理。预约服务：{$data['serve_name']}，姓名：{$data['name']}，联系电话：{$data['phone']}，留言：{$data['message']}，预约时间：".date('Y-m-d H:i:s',$data['order_time']);
+                send_mail($toemail,$name,$subject,$content);
+            }
+            header('Content-Type:application/json; charset=utf-8');
+            return json_encode($info);
         }else{
-        	$openid = db('User') -> where("id",$data['uid']) -> value('openid');
+            $openid = db('User') -> where("id",$data['uid']) -> value('openid');
             $adminData = db('Admin') -> field('appid,mch_id,mch_secret,secret,apiclient_cert_pem,apiclient_key_pem,rootca_pem') -> find($data['admin_id']);
             $url = 'https://jisu.shenmikj.com/reservation/public/api/Notify/notify';
             Loader::import('WxPayPubHelper.WxPayPubHelper');
-        	$unifiedOrder = new \UnifiedOrder_pub();
-	      	$unifiedOrder->setParameter("out_trade_no",$data['number']);
-	      	$unifiedOrder->setParameter("body",$data['serve_name']);
-	      	$unifiedOrder->setParameter("total_fee",$data['money']*100);
-	      	$unifiedOrder->setParameter("trade_type","JSAPI");
-	      	$unifiedOrder->setParameter("openid",$openid);
-	      	$unifiedOrder->setParameter("notify_url",$url);
+            $unifiedOrder = new \UnifiedOrder_pub();
+            $unifiedOrder->setParameter("out_trade_no",$data['number']);
+            $unifiedOrder->setParameter("body",$data['serve_name']);
+            $unifiedOrder->setParameter("total_fee",$data['money']*100);
+            $unifiedOrder->setParameter("trade_type","JSAPI");
+            $unifiedOrder->setParameter("openid",$openid);
+            $unifiedOrder->setParameter("notify_url",$url);
             $unifiedOrder->setParameter("appid",$adminData['appid']);
             $unifiedOrder->setParameter("mch_id",$adminData['mch_id']);
             $unifiedOrder->setParameter("key",$adminData['mch_secret']);
             $unifiedOrder-> cert['apiclient_cert_pem'] = "./uploads/cert/{$data['admin_id']}/".$adminData['apiclient_cert_pem'];
             $unifiedOrder-> cert['apiclient_key_pem'] = "./uploads/cert/{$data['admin_id']}/".$adminData['apiclient_key_pem'];
             $unifiedOrder-> cert['rootca_pem'] = "./uploads/cert/{$data['admin_id']}/".$adminData['rootca_pem'];
-	      	$prepay_id = $unifiedOrder->getPrepayId();
-	      	if(!$prepay_id){
-	      		Db::rollback();
-	      		$info['status'] = -3;
-				$info['msg'] = '调微信支付失败';
-				header('Content-Type:application/json; charset=utf-8');
-        		return json_encode($info);
-	      	}
+            $prepay_id = $unifiedOrder->getPrepayId();
+            if(!$prepay_id){
+                Db::rollback();
+                $info['status'] = -3;
+                $info['msg'] = '调微信支付失败';
+                header('Content-Type:application/json; charset=utf-8');
+                return json_encode($info);
+            }
 
-	      	Db::commit();
+            Db::commit();
 
-	      	/* 获得jsApi参数 */
-			$jsApi = new \JsApi_pub();
+            /* 获得jsApi参数 */
+            $jsApi = new \JsApi_pub();
             $jsApi -> appid = $adminData['appid'];
             $jsApi -> secret = $adminData['secret'];
             $jsApi->setParameter("key",$adminData['mch_secret']);
-			$jsApi->setPrepayId($prepay_id);
-			$param = $jsApi->getParameters();
+            $jsApi->setPrepayId($prepay_id);
+            $param = $jsApi->getParameters();
 
-			$param = json_decode($param);
-			$info['status'] = 1;
-			$info['msg'] = '支付配置成功';
-			$info['param'] = $param;
-			header('Content-Type:application/json; charset=utf-8');
-        	return json_encode($info);
+            $param = json_decode($param);
+            $info['status'] = 1;
+            $info['msg'] = '支付配置成功';
+            $info['param'] = $param;
+            header('Content-Type:application/json; charset=utf-8');
+            return json_encode($info);
         }
-        
+
 
 
     }
@@ -174,9 +175,9 @@ class Order extends Controller
     //查看订单列表
     public function UserOrderList()
     {
-    	$id = input('post.id');
+        $id = input('post.id');
 
-    	if($id == 'undefined' || $id =='null' || $id == ''){
+        if($id == 'undefined' || $id =='null' || $id == ''){
             $info['status'] = -1;
             $info['msg'] = '缺少用户id';
             header('Content-Type:application/json; charset=utf-8');
@@ -186,7 +187,7 @@ class Order extends Controller
         $data = db('Order') -> field('id,number,money,status,worker_name,serve_name,serve_picture,order_time,refuse_reason,refund_status') -> where("uid={$id} AND (opayway = 1 OR (opayway = 2 AND (status BETWEEN 1 AND 4)) OR (opayway = 3 AND status = 3))") -> order('id DESC') -> select();
         foreach ($data as $key => $value) {
             $data[$key]['serve_picture'] = 'https://'.$_SERVER['HTTP_HOST'].'/reservation/public/uploads/serve/'.$data[$key]['serve_picture'];
-        	$data[$key]['order_time'] = date('Y年m月d日 H:i',$data[$key]['order_time']);
+            $data[$key]['order_time'] = date('Y年m月d日 H:i',$data[$key]['order_time']);
         }
 
         $info['status'] = 1;
@@ -210,8 +211,8 @@ class Order extends Controller
         $data = db('Order') -> field('id,number,money,worker_name,serve_name,serve_picture,order_time,create_time,name,phone,refuse_reason,message,admin_id') -> where("id",$id) -> find();
         $data['serve_picture'] = 'https://'.$_SERVER['HTTP_HOST'].'/reservation/public/uploads/serve/'.$data['serve_picture'];
         $data['order_time'] = date("Y-m-d H:i:s",$data['order_time']);
-		$data['create_time'] = date("Y-m-d H:i:s",$data['create_time']);
-		
+        $data['create_time'] = date("Y-m-d H:i:s",$data['create_time']);
+
         $adminData = db('Admin') -> field('store_phone') -> find($data['admin_id']);
         $info['hotline'] = $adminData['store_phone'];
 
@@ -225,9 +226,9 @@ class Order extends Controller
 
     //退约接口
     public function ApplyCancelOrder(){
-    	$id = input('post.id');
+        $id = input('post.id');
 
-    	if($id == 'undefined' || $id =='null' || $id == ''){
+        if($id == 'undefined' || $id =='null' || $id == ''){
             $info['status'] = -1;
             $info['msg'] = '缺少订单id';
             header('Content-Type:application/json; charset=utf-8');
@@ -238,10 +239,10 @@ class Order extends Controller
         $success = db('Order') -> where("id",$id) -> update($data);
 
         if($success){
-        	$info['status'] = 1;
+            $info['status'] = 1;
         }else{
-        	$info['status'] = -2;
-        	$info['msg'] = '更新订单失败';
+            $info['status'] = -2;
+            $info['msg'] = '更新订单失败';
         }
 
         header('Content-Type:application/json; charset=utf-8');
@@ -249,7 +250,7 @@ class Order extends Controller
 
     }
 
-     //提交客户自定义金额在线支付
+    //提交客户自定义金额在线支付
     public function CustomizeOrderQuantity(){
         $data['uid'] = input('post.uid');
         $data['money'] = input('post.money');
@@ -287,12 +288,12 @@ class Order extends Controller
         $data['order_time'] = $nowtime;
         $data['serve_picture'] = '';
         $data['serve_name'] = '店内在线支付';
-        
+
         $orderNumber = db('Order') -> column('number');
         do{
             $data['number'] = date('YmdHis').mt_rand(10000,99999);
         }while(in_array($data['number'], $orderNumber));
-        
+
 
         Db::startTrans();
         $success = db('Order') -> insert($data);
@@ -303,11 +304,11 @@ class Order extends Controller
         }
 
         if($data['opayway'] == 1){
-        	Db::commit();
-			header('Content-Type:application/json; charset=utf-8');
-        	return json_encode($info);
+            Db::commit();
+            header('Content-Type:application/json; charset=utf-8');
+            return json_encode($info);
         }else{
-        	$openid = db('User') -> where("id",$data['uid']) -> value('openid');
+            $openid = db('User') -> where("id",$data['uid']) -> value('openid');
             $adminData = db('Admin') -> field('appid,mch_id,mch_secret,secret,apiclient_cert_pem,apiclient_key_pem,rootca_pem') -> find($data['admin_id']);
             $url = 'https://jisu.shenmikj.com/reservation/public/api/Notify/notify';
             Loader::import('WxPayPubHelper.WxPayPubHelper');
@@ -342,16 +343,115 @@ class Order extends Controller
             $jsApi->setPrepayId($prepay_id);
             $jsApi->setParameter("key",$adminData['mch_secret']);
             $param = $jsApi->getParameters();
-			$param = json_decode($param);
-			$info['status'] = 1;
-			$info['msg'] = '支付配置成功';
-			$info['param'] = $param;
-			header('Content-Type:application/json; charset=utf-8');
-        	return json_encode($info);
+            $param = json_decode($param);
+            $info['status'] = 1;
+            $info['msg'] = '支付配置成功';
+            $info['param'] = $param;
+            header('Content-Type:application/json; charset=utf-8');
+            return json_encode($info);
         }
-        
+
+    }
+
+    /**
+     * 支付
+     * @param int $order_id  订单编号
+     * @return array
+     */
+    public function payMoney($order_num,$admin_id){
+        try{
+            $Order=db('goods_order');
+            $order=$Order->where("order_sn=".$order_num." and admin_id=".$admin_id)->find();
+
+            $out_trade_no=$order_num;
+            $prepayid=$order['result'];
+
+            if($prepayid!=""&&$prepayid!=null){ return $prepayid;}
+
+            $notify_url='https://'.$_SERVER['HTTP_HOST']."/reservation/public/api/Notify/paysuccess";
+            $date['uid']=$order['uid'];
+            $date['serve_name']=$order['order_name'];
+            $date['number']=$out_trade_no;
+            $date['money']=$order['gold'];
+            $date['admin_id']=$admin_id;
+            // 获取预支付ID
+//            dump($order);
+//            dump($notify_url);
+//        $result = $pay->getPrepayId($user->open_id, $order->name, $out_trade_no, $order->price*100, $notify_url, $trade_type = "JSAPI");
+            $result = $this->pay($date,$notify_url);
+            $result= json_decode($result,true);
+//            dump($openid);
+//            dump($order['order_name']);
+//            dump($out_trade_no);
+//            dump( $order['gold']);
+//            dump($notify_url);
+//            dump($pay);
+//            dump($result);die;
+            // 处理创建结果
+//            dump($result['status']);
+            if($result['status']===1){
+
+                $Order->where("order_sn=".$order_num)->update(['result' => json_encode($result['param'])]);
+                return json($result['param']);
+
+            }else{
+                // 接口失败的处理
+                return json(array('code' => '404', 'info' => '订单生成失败'));
+                // return json(['msg' => '支付失败'], 200);
+            }
+
+        }catch (Exception $e){
+            return json(array('code' => '404', 'info' => '参数错误',"order"=>$e->getMessage()));
+            // return json(['msg' => '参数错误',"order"=>$e->getMessage()], 200);
+
+        }
+
+    }
+
+    public function pay($data = [],$url){
 
 
+        $openid = db('User') -> where("id",$data['uid']) -> value('openid');
+        $adminData = db('Admin') -> field('appid,mch_id,mch_secret,secret,apiclient_cert_pem,apiclient_key_pem,rootca_pem') -> find($data['admin_id']);
+//        $url = 'https://jisu.shenmikj.com/reservation/public/api/Notify/notify';
+        Loader::import('WxPayPubHelper.WxPayPubHelper');
+        $unifiedOrder = new \UnifiedOrder_pub();
+        $unifiedOrder->setParameter("out_trade_no",$data['number']);
+        $unifiedOrder->setParameter("body",$data['serve_name']);
+        $unifiedOrder->setParameter("total_fee",$data['money']*100);
+        $unifiedOrder->setParameter("trade_type","JSAPI");
+        $unifiedOrder->setParameter("openid",$openid);
+        $unifiedOrder->setParameter("notify_url",$url);
+        $unifiedOrder->setParameter("appid",$adminData['appid']);
+        $unifiedOrder->setParameter("mch_id",$adminData['mch_id']);
+        $unifiedOrder->setParameter("key",$adminData['mch_secret']);
+        $unifiedOrder-> cert['apiclient_cert_pem'] = "./uploads/cert/{$data['admin_id']}/".$adminData['apiclient_cert_pem'];
+        $unifiedOrder-> cert['apiclient_key_pem'] = "./uploads/cert/{$data['admin_id']}/".$adminData['apiclient_key_pem'];
+        $unifiedOrder-> cert['rootca_pem'] = "./uploads/cert/{$data['admin_id']}/".$adminData['rootca_pem'];
+        $prepay_id = $unifiedOrder->getPrepayId();
+        if(!$prepay_id){
+            Db::rollback();
+            $info['status'] = -3;
+            $info['msg'] = '调微信支付失败';
+            header('Content-Type:application/json; charset=utf-8');
+            return json_encode($info);
+        }
+
+        Db::commit();
+
+        /* 获得jsApi参数 */
+        $jsApi = new \JsApi_pub();
+        $jsApi -> appid = $adminData['appid'];
+        $jsApi -> secret = $adminData['secret'];
+        $jsApi->setPrepayId($prepay_id);
+        $jsApi->setParameter("key",$adminData['mch_secret']);
+        $param = $jsApi->getParameters();
+        $param = json_decode($param);
+        $info['status'] = 1;
+        $info['msg'] = '支付配置成功';
+        $info['param'] = $param;
+        header('Content-Type:application/json; charset=utf-8');
+        return json_encode($info);
     }
 
 

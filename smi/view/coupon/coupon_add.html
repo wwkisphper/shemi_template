@@ -1,0 +1,116 @@
+  <!doctype html>
+  <html class="no-js">
+  <head>
+    {include file="public/head" /}
+    <style type="text/css">
+      .am-form{width:500px;margin-left:20px;float: left;}
+      #editor {font-size: 12px;}
+      .am-form label span{font-size: 13px;font-weight:normal;}
+    </style>
+  </head>
+  <body>
+  {include file="public/header" /}
+
+  <div class="am-cf admin-main">
+
+    <!-- sidebar start -->
+    {include file="public/sidebar" nav="coupon"/}
+    <!-- sidebar end -->
+
+    <!-- content start -->
+    <div class="content-page">
+      <div class="content">
+        <div class="card-box" style="overflow: hidden">
+          <div class="am-cf am-padding">
+            <div class="am-fl am-cf">
+              <strong class="am-text-primary am-text-lg">优惠券管理</strong> /
+              <small>新增优惠券</small>
+            </div>
+          </div>
+          <hr style="margin-top:0px;">
+          <div style="width: auto;height: auto;">
+            <form class="am-form" action="" method="POST" id="saveForm" enctype="multipart/form-data" style="clear: both;width: 800px !important;">
+
+              <input type="hidden" name="op" value="save" />
+              <input type="hidden" name="id" value="" />
+              <div class="am-form-group am-form-inline">
+
+                <div class="am-form-group" style="margin-right:450px;float: right;width: 70px;margin-top: 30px">
+                  <label style="margin-left: 10px;margin-top: 7px">启用</label>
+                  <div class="ttt-switch" style="float: left;margin-top: 7px">
+                    <input type="checkbox" name="status" >
+                    <span class="ttt-switch-btn"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="am-form-group">
+                <label>优惠券限制类目</label>
+                <select name="cate_id" id="one" style="width: 150px;">
+                  <option value="0">请选择</option>
+                  <option value="0">无限制类目</option>
+                  <?php foreach($pid_lists as $i=>$val){?>
+                  <option value="<?php echo $val['id'] ?>"  ><?php echo $val['title'] ?></option>
+                  <?php } ?>
+                </select>
+              </div>
+
+
+
+              <div class="am-form-group">
+                <label>优惠券标题</label>
+                <input type="text" name="title" value=""  style="width: 400px;">
+              </div>
+              <div class="am-form-group">
+                <label>条件金额<span>（达到此金额才可使用优惠券）</span></label>
+                <input type="text" name="sale" value="" placeholder="如:100" style="width: 200px;text-align: center;">
+              </div>
+              <div class="am-form-group">
+                <label>优惠券类型</label>
+                <input type="radio" name="type" value="1" >满减
+                <input type="radio" name="type" value="2" >折扣
+              </div>
+              <div class="am-form-group">
+                <label>减免金额<span>（满减填写实扣金额,折扣 如0.5,0.8）</span></label>
+                <input type="text" name="minus" value="" placeholder="如:100或0.9" style="width: 200px;text-align: center;">
+              </div>
+
+              <div class="am-form-group">
+                <label>使用天数</label>
+                <input type="text" name="term" value="" placeholder="如:7" style="width: 200px;text-align: center;">
+              </div>
+
+
+
+              <button type="button" class="am-btn am-btn-default" id="form_submit">保存</button>
+
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <script type="text/javascript">
+          function layert(content){ layer.open({title:'',content:content,shade:0.2}); }
+          $(function(){
+              $("#form_submit").on('click',function(){
+                  // var type = $("select[name=type] option:selected").val();
+                  // var brand_id = $("select[name=brand_id] option:selected").val();
+                  // var title = $("input[name=title]").val();
+                  // var content = ue.getContent();
+                  // if(!type) layert('请选择分类');
+                  // else if(!brand_id)layert('请选择品牌');
+                  // else if(!title)layert('请填写标题');
+                  // else if(!content)layert('请填写内容');
+                  // else $("#saveForm").submit();
+                  $("#saveForm").submit();
+              });
+          });
+      </script>
+      <footer class="admin-content-footer"><hr></footer>
+    </div>
+    <!-- content end -->
+  </div>
+
+  {include file="public/footer" /}
+
+  </body>
+  </html>
